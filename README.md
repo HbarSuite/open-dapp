@@ -33,27 +33,27 @@ firebase login
 ```bash
 firebase init
 ```
-and configure it as follows\n
-"Which Firebase CLI features do you want to set up for this folder?" Choose "Configure files for Firebase Hosting and (optionally) set up GitHub Action deploys"\n
-"What do you want to use as your public directory?" Enter "www".\n
-"Set up automatic builds and deploys with GitHub?" Enter the option you prefer.\n
-"Configure as a single-page app (rewrite all urls to /index.html)?" Enter "Yes".\n
-"File www/index.html already exists. Overwrite?" Enter "No".\n
-5 - send us an [Email](mailto:info@hbarsuite.network) with your project and domain, because you won't be allowed to interact with the smart-nodes unless you're whitelsted first.\n
+and configure it as follows<br />
+"Which Firebase CLI features do you want to set up for this folder?" Choose "Configure files for Firebase Hosting and (optionally) set up GitHub Action deploys"<br />
+"What do you want to use as your public directory?" Enter "www".<br />
+"Set up automatic builds and deploys with GitHub?" Enter the option you prefer.<br />
+"Configure as a single-page app (rewrite all urls to /index.html)?" Enter "Yes".<br />
+"File www/index.html already exists. Overwrite?" Enter "No".<br />
+5 - send us an [Email](mailto:info@hbarsuite.network) with your project and domain, because you won't be allowed to interact with the smart-nodes unless you're whitelsted first.<br />
 
 ## Customizations and Restrictions
 Please feel free to change the UI/CSS as you wish, to fully match your brand and colors.
 There is no limitations on the use of the existing smart-node api, which you can find here:
-TESTNET\n
-[Smart-Node-1](testnet-sn1.hbarsuite.network/api)\n
-[Smart-Node-2](testnet-sn2.hbarsuite.network/api)\n
-[Smart-Node-3](testnet-sn3.hbarsuite.network/api)\n
-[Smart-Node-4](testnet-sn4.hbarsuite.network/api)\n
-MAINNET\n
-[Smart-Node-1](mainnet-sn1.hbarsuite.network/api)\n
-[Smart-Node-2](mainnet-sn2.hbarsuite.network/api)\n
-[Smart-Node-3](mainnet-sn3.hbarsuite.network/api)\n
-[Smart-Node-4](mainnet-sn4.hbarsuite.network/api)\n
+TESTNET<br />
+[Smart-Node-1](testnet-sn1.hbarsuite.network/api)<br />
+[Smart-Node-2](testnet-sn2.hbarsuite.network/api)<br />
+[Smart-Node-3](testnet-sn3.hbarsuite.network/api)<br />
+[Smart-Node-4](testnet-sn4.hbarsuite.network/api)<br />
+MAINNET<br />
+[Smart-Node-1](mainnet-sn1.hbarsuite.network/api)<br />
+[Smart-Node-2](mainnet-sn2.hbarsuite.network/api)<br />
+[Smart-Node-3](mainnet-sn3.hbarsuite.network/api)<br />
+[Smart-Node-4](mainnet-sn4.hbarsuite.network/api)<br />
 
 Please DO NOT remove the footer in the menu section, credits to HbarSuite technology is a mandatory requirement.
 
