@@ -70,7 +70,7 @@ MAINNET<br />
 [Smart-Node-3](mainnet-sn3.hbarsuite.network/api)<br />
 [Smart-Node-4](mainnet-sn4.hbarsuite.network/api)<br />
 
-Please DO NOT remove the footer in the menu section, credits to HbarSuite technology is a mandatory requirement.
+<b>Please DO NOT remove the footer in the menu section, credits to HbarSuite technology is a mandatory requirement.</b>
 
 ## License
 DAPP Community Edition [HSuite Network - Open Source Licensed]
