@@ -1,0 +1,276 @@
+.avatar {
+  width: 80px;
+  height:80px;
+  margin: auto;
+  margin-bottom: 5px;
+  border-radius: 50%;
+  box-shadow: 0px 0px 10px #9a0dff;
+}
+
+.committee-avatar {
+  margin: 5px;
+  margin-right: 5px;
+  width: 30px;
+  height:30px;
+  border-radius: 50%;
+  box-shadow: 0px 0px 5px #9a0dff;;
+}
+
+.cards_DAO {
+  border-style: solid;
+  border-width: 1px;
+  background-color: white;
+  border-color: #4d3e71;
+  border-radius: 10px;
+  box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.4);
+}
+.cards_proposal {
+  background-color: white;
+  border-style: solid;
+  border-width: 0px;
+  border-radius: 10px;
+  box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.4);
+}
+
+.back-icon{
+  color: white;
+  background-color: #200E4E;
+  display: flex;
+  margin:10px;
+  margin-top: 0px;
+}
+
+.back-text{
+  margin:auto;
+  margin-left:0px;
+  font-size: 16px;
+}
+
+.cards_DAO:hover{
+  border-color: #b9b5c2;
+}
+
+.top-title{
+  font-size: 26px;
+  text-align: center;
+}
+
+.center-left{
+  margin: auto;
+  margin-left: 0px;
+}
+
+.center-rigth{
+  margin: auto;
+  margin-right: 0px;
+}
+
+.justify-center{
+  margin: auto;
+  justify-content: center;
+}
+
+.align-center{
+  margin: auto;
+  align-items: center;
+}
+
+.top-space{
+  margin-top: 20px;
+}
+.top-space10{
+  margin-top: 10px;
+}
+
+.bot-space{
+  margin-bottom: 20px;
+}
+.bot-space10{
+  margin-bottom: 10px;
+}
+
+.top-line{
+  border-top: 1px solid black;
+}
+
+.bottom-line{
+  border-bottom: 1px solid black;
+}
+
+.flex{
+  display: flex;
+}
+
+.round-item{
+  --background: #f4f5f8;
+  border-style: solid;
+  border-width: 1px;
+  border-radius: 10px;
+  border-color: rgb(219, 219, 219);
+  box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+}
+
+.status-badge{
+  margin: 5px;
+  display: flex;
+  justify-content: center;
+  margin-right:10px;
+  font-size: 14px;
+  border-radius: 20px;
+}
+.mini-avatar{
+  margin: 5px;
+  display: flex;
+  width: 40px;
+  height: 40px;
+  margin-right:4px;
+}
+
+.small-title{
+  margin: 5px;
+  margin-right:4px;
+  display: flex;
+  justify-content: center;
+  font-size: 12px;
+}
+
+.header-title{
+  text-align: center;
+  font-size: 14px;
+  margin-bottom: 5px;
+}
+
+.divisor{
+  border-bottom: 1px solid gray;
+  color: black;
+  margin: auto;
+  margin-bottom: 5px;
+  padding: 10px;
+  text-align: center;
+  width: 60%;
+}
+ion-progress-bar {
+  height:10px;
+  border-radius:15px;
+}
+
+.space-between{
+  display: flex;
+  justify-content: space-between;
+}
+
+.vote-btn{
+  margin: auto;
+  margin-top: 10px;
+  width: 60%;
+
+  font-size: 12px;
+
+  display: flex;
+  justify-content: center;
+
+  --border-color: #5221c4;
+  --border-radius: 10px;
+  --border-style: solid;
+  --border-width: 1px;
+  --box-shadow: 0px 0px 5px #9a0dff;
+   color:#5221c4;
+
+  --background: #f4f5f8;
+
+}
+
+.vote-btn:hover{
+  cursor: pointer;
+  --border-color: #8e67e9;
+  --box-shadow: 0px 0px 5px #b65ef5;
+}
+
+.vote-btn-submit{
+  margin: auto;
+  margin-top: 20px;
+  width: 60%;
+
+  display: flex;
+  justify-content: center;
+  font-size: 12px;
+
+  --border-color: #9a0dff;
+  --border-radius: 10px;
+  --border-style: solid;
+  --border-width: 1px;
+  --box-shadow: 0px 0px 5px #9a0dff;
+}
+
+.click{
+  cursor: pointer;
+  --background:#5221c4;
+  color: white;
+}
+
+.description-img{
+  display: flex;
+  margin: auto;
+  padding-top: 10px;
+  justify-content: center;
+  width: 50%;
+  height: auto;
+}
+
+.container {
+  font-size: 12px;
+  line-height: 16px;
+  height: 120px;
+  overflow: hidden;
+}
+.containerVotes {
+  font-size: 12px;
+  line-height: 16px;
+  height: 320px;
+  overflow-y: scroll;
+}
+
+.show {
+  overflow: visible;
+  height: auto;
+}
+.showbtn{
+
+  cursor: pointer;
+  --border-color: #9a0dff;
+  --border-radius: 10px;
+  --border-style: solid;
+  --border-width: 1px;
+  --box-shadow: 0px 0px 5px #9a0dff;
+
+  height: 25px;
+  width: 30%;
+  color: white;
+  display: flex;
+  justify-content: center;
+  margin: auto;
+  margin-top: 10px;
+  font-size: 12px;
+}
+
+.text-wrap{
+  width: 100%;
+  overflow: hidden;
+}
+
+.txt-label{
+  font-size: 12px;
+}
+
+p{
+  font-size: 12px;
+}
+
+.subtitle-div{
+  display: flex;
+  justify-content: center;
+}
+.subtitle-div2{
+  display: flex;
+  align-items: center;
+}

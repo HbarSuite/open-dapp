@@ -1,0 +1,6 @@
+{
+	"appId": "network.finance.hsuite",
+	"appName": "HSuite",
+	"webDir": "www",
+	"bundledWebRuntime": false
+}

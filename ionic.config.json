@@ -1,0 +1,8 @@
+{
+  "name": "HSuite",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular",
+  "id": "727d473a"
+}

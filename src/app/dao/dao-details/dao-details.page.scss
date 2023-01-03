@@ -1,0 +1,164 @@
+.committees {
+  margin-top: 15px;
+}
+
+.avatar {
+  width: 90px;
+  height:90px;
+  margin: auto;
+  margin-right: 15px;
+  border-radius: 50%;
+  box-shadow: 0px 0px 10px #9a0dff;
+}
+.avatar-sm{
+  width: 60px;
+  height:60px;
+  margin: auto;
+  border-radius: 50%;
+
+}
+
+.committee-avatar {
+  margin: 5px;
+  margin-right: 10px;
+  border-radius: 50%;
+  box-shadow: 0px 0px 5px #9a0dff;;
+}
+
+.cards_DAO {
+  border-style: solid;
+  border-width: 1px;
+  background-color: white;
+  border-color: #4d3e71;
+  border-radius: 10px;
+  box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.4);
+}
+
+.back-icon{
+  color: white;
+  background-color: #200E4E;
+  display: flex;
+  margin:10px;
+  margin-top: 0px;
+}
+
+.back-text{
+  margin:auto;
+  margin-left:0px;
+  font-size: 16px;
+}
+
+.topCardHeader{
+  padding: 20px;
+  padding-bottom: 5px;
+}
+
+.top-title{
+  font-size: 24px;
+}
+
+.center-left{
+  margin: auto;
+  margin-left: 0px;
+}
+
+.center-rigth{
+  margin: auto;
+  margin-right: 0px;
+}
+
+.top-space{
+  margin-top: 20px;
+}
+
+.top-space10{
+  margin-top: 10px;
+}
+
+.headerSegment{
+  height: 85px;
+}
+
+.selectList{
+  padding: 0px; border-style: solid;
+  border-width: 1px;
+  border-color: lightgray;
+  border-radius: 10px;
+}
+
+.top-line{
+  border-top: 1px solid black;
+}
+.bottom-line{
+  border-bottom: 1px solid black;
+}
+
+.proposalHeader{
+  justify-content:space-between;
+  align-items:center;
+  display:flex;
+}
+
+.ellipse{
+  font-size: 12px;
+  margin: auto;
+}
+
+.flex{
+  display: flex;
+}
+
+.list-md{
+  padding: 0px;
+}
+.label{
+  font-size: 14px;
+  padding-bottom: 5px;
+  margin-left: 5px;
+  color: black;
+}
+
+.round-item{
+  --background: #f4f5f8;
+  border-style: solid;
+  border-width: 1px;
+  border-radius: 10px;
+  border-color: rgb(219, 219, 219);
+  box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+}
+
+ion-datetime {
+  background: #f4f5f8;
+  border-radius: 10px;
+}
+
+ion-searchbar{
+--placeholder-color: white;
+--placeholder-opacity: 1;
+}
+
+ion-icon {
+  font-size: 32px;
+}
+
+ion-select {
+  --placeholder-color: black;
+  --placeholder-opacity: 1;
+  width: 100%;
+  justify-content: center;
+}
+
+
+
+.header-content{
+  position: relative;
+  width: 100%;
+  margin-top: 75px;
+}
+
+.floatdown {
+  position: absolute;
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  }

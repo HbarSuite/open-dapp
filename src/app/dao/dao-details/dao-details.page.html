@@ -1,0 +1,435 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>DAO</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content color="secondary">
+  <ion-grid>
+    <ion-row>
+      <ion-col size="1" class="ion-hide-lg-down">
+      </ion-col>
+
+      <ion-col size-md>
+
+        <div>
+          <button ion-button icon-only class="back-icon" [routerLink]="['/dao']">
+            <ion-icon name="arrow-back-outline" style="font-size:18px"></ion-icon>
+            <p class="back-text">Back</p>
+          </button>
+        </div>
+
+        <ion-card class="cards_DAO" *ngIf="dao == null">
+          <div><img src="assets/headers/tokenmanager.png" alt="banner" class="floatdown"/></div>
+          <ion-card-header class="topCardHeader">
+
+            <ion-grid>
+              <ion-row>
+                <ion-col size-xs="12"  class="header-content top-space10">
+                  <div style="text-align:center;">
+                    <div>
+                      <ion-avatar class="avatar" style="margin: auto; margin-bottom:10px;">
+                        <ion-skeleton-text animated style="background-color: white;"></ion-skeleton-text>
+                      </ion-avatar>
+                    </div>
+                    <div>
+                      <ion-card-title class="top-title">
+                        <ion-skeleton-text animated style="width: 30%"></ion-skeleton-text>
+                      </ion-card-title>
+                      <ion-card-subtitle color="medium">
+                        <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+                      </ion-card-subtitle>
+                    </div>
+                  </div>
+                </ion-col>
+                <ion-col class="top-space10" size-xs="12" >
+                  <div style="text-align:center;">
+                    <h3 style="font-size:16px;color: rgb(31, 31, 31);">About</h3>
+                    <p>
+                      <ion-skeleton-text animated style="width: 50%"></ion-skeleton-text>
+                    </p>
+                    <p>
+                      <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
+                    </p>
+                    <p>
+                      <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+                    </p>
+                  </div>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+
+          </ion-card-header>
+
+              <ion-card-content>
+
+                <ion-segment [(ngModel)]="segment" scrollable="true" swipeGesture="true" class="top-space segment" mode="md">
+                  <ion-segment-button value="proposals">
+                    <ion-label>Proposals</ion-label>
+                  </ion-segment-button>
+                  <ion-segment-button value="newProposal">
+                    <ion-label>New Proposal</ion-label>
+                  </ion-segment-button>
+                </ion-segment>
+
+              </ion-card-content>
+
+        </ion-card>
+
+        <ion-card class="cards_DAO" *ngIf="dao != null">
+          <div><img src="assets/headers/hsuite_header.png" alt="banner" class="floatdown"/></div>
+          <ion-card-header class="topCardHeader">
+
+            <ion-grid>
+              <ion-row>
+                <ion-col size-xs="12"  class="header-content top-space10">
+                  <div style="text-align:center;">
+                    <div>
+                      <ion-avatar class="avatar" style="margin: auto; margin-bottom:10px;">
+                        <img [src]="generateImageUrl(dao.image)" alt="daoLogo"/>
+                      </ion-avatar>
+                    </div>
+                    <div>
+                      <ion-card-title class="top-title">{{dao.name}}</ion-card-title>
+                      <ion-card-subtitle color="medium">{{dao.description}}</ion-card-subtitle>
+                    </div>
+                  </div>
+                </ion-col>
+                <ion-col class="top-space10" size-xs="12" >
+                  <div style="text-align:center;">
+                    <h3 style="font-size:16px;color: rgb(31, 31, 31);">About</h3>
+                    <p>{{dao.about}}</p>
+                  </div>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+
+          </ion-card-header>
+
+              <ion-card-content>
+
+                <ion-segment [(ngModel)]="segment" scrollable="true" swipeGesture="true" class="top-space segment" mode="md">
+                  <ion-segment-button value="proposals">
+                    <ion-label>Proposals</ion-label>
+                  </ion-segment-button>
+                  <ion-segment-button value="newProposal">
+                    <ion-label>New Proposal</ion-label>
+                  </ion-segment-button>
+                </ion-segment>
+
+              </ion-card-content>
+
+        </ion-card>
+
+        <div [ngSwitch]="segment">
+
+          <div *ngSwitchCase="'proposals'">
+            <ion-card class="cards_DAO">
+              <ion-segment [(ngModel)]="proposal_type" scrollable="true" swipeGesture="true" class="top-space segment" mode="md">
+                <ion-segment-button value="public">
+                  <ion-label>Public</ion-label>
+                </ion-segment-button>
+                <ion-segment-button value="private">
+                  <ion-label>Council</ion-label>
+                </ion-segment-button>
+              </ion-segment>
+
+              <div [ngSwitch]="proposal_type">
+                <div *ngSwitchCase="'public'">
+                  <ion-card-header class="headerSegment">
+                    <div class="flex">
+                      <div class="center-left">
+                        <ion-card-title class="top-title">Proposals</ion-card-title>
+                      </div>
+                      <ion-list color="light" class="selectList">
+                        <ion-item>
+                          <ion-select interface="popover" placeholder="All" (ionChange)="filterPublicProposals($event)">
+                            <ion-select-option value="all">All</ion-select-option>
+                            <ion-select-option value="active">Active</ion-select-option>
+                            <ion-select-option value="pending">Pending</ion-select-option>
+                            <ion-select-option value="closed">Closed</ion-select-option>
+                          </ion-select>
+                        </ion-item>
+                      </ion-list>
+                    </div>
+                  </ion-card-header>
+    
+                  <div *ngIf="filteredPublicProposals.length > 0">
+                    <div class="top-line" *ngFor="let publicProposal of filteredPublicProposals">
+                      <ion-card-header>
+                        <ion-card-subtitle>
+                          <div class="proposalHeader">
+                            <ion-avatar>
+                              <ion-img class="avatar-sm" src="assets/icon/logo.png"></ion-img>
+                            </ion-avatar>
+                            <ion-text>by: {{publicProposal.author}}</ion-text>
+                            <ion-badge [color]="getColor(publicProposal)">{{publicProposal.status}}</ion-badge>
+                          </div>
+                        </ion-card-subtitle>
+                        <a [routerLink]="['proposal', publicProposal.consensus_timestamp, publicProposal.type]">
+                          <ion-card-title color="secondary" class="top-title top-space">{{publicProposal.title}}</ion-card-title>
+                        </a>
+                      </ion-card-header>
+    
+                      <ion-card-content>
+                        <p>
+                          <ion-text> {{publicProposal.description}} </ion-text>
+                        </p>
+    
+                        <div class="top-space  bot-space">
+                          <ion-text>
+                            <ion-icon name="ellipse" class="ellipse" [color]="getColor(publicProposal)" ></ion-icon>
+                            {{publicProposal.status}}, {{publicProposal.latestStatistics.votes}} Votes
+                          </ion-text>
+                        </div>
+                      </ion-card-content>
+    
+                    </div>
+                  </div>
+
+                  <div *ngIf="isLoading">
+                    <div class="top-line">
+                      <ion-card-header>
+                        <ion-card-subtitle>
+                          <div class="proposalHeader">
+                            <ion-avatar>
+                              <ion-skeleton-text animated style="background-color: white;"></ion-skeleton-text>
+                            </ion-avatar>
+                            <ion-text><ion-skeleton-text animated style="width: 60%"></ion-skeleton-text></ion-text>
+                            <ion-text><ion-skeleton-text animated style="width: 30%"></ion-skeleton-text></ion-text>
+                          </div>
+                        </ion-card-subtitle>
+                        <ion-card-title color="secondary" class="top-title top-space">
+                          <ion-skeleton-text animated style="width: 75%"></ion-skeleton-text>
+                        </ion-card-title>
+                      </ion-card-header>
+    
+                      <ion-card-content>
+                        <p>
+                          <ion-text>
+                            <p><ion-skeleton-text animated style="width: 75%"></ion-skeleton-text></p>
+                            <p><ion-skeleton-text animated style="width: 55%"></ion-skeleton-text></p>
+                            <p><ion-skeleton-text animated style="width: 80%"></ion-skeleton-text></p>
+                            <p><ion-skeleton-text animated style="width: 45%"></ion-skeleton-text></p>
+                          </ion-text>
+                        </p>
+    
+                        <div class="top-space  bot-space">
+                          <ion-text>
+                            <ion-icon name="ellipse" class="ellipse" color="primary" ></ion-icon>
+                            <ion-skeleton-text animated style="width: 45%"></ion-skeleton-text>
+                          </ion-text>
+                        </div>
+                      </ion-card-content>
+    
+                    </div>
+                  </div>
+                </div>
+
+                <div *ngSwitchCase="'private'">
+                  <ion-card-header class="headerSegment">
+                    <div class="flex">
+                      <div class="center-left">
+                        <ion-card-title class="top-title">Proposals</ion-card-title>
+                      </div>
+                      <ion-list color="light" class="selectList">
+                        <ion-item>
+                          <ion-select interface="popover" placeholder="All" (ionChange)="filterPrivateProposals($event)">
+                            <ion-select-option value="all">All</ion-select-option>
+                            <ion-select-option value="approved">Approved</ion-select-option>
+                            <ion-select-option value="pending">Pending</ion-select-option>
+                            <ion-select-option value="rejected">Rejected</ion-select-option>
+                          </ion-select>
+                        </ion-item>
+                      </ion-list>
+                    </div>
+                  </ion-card-header>
+    
+                  <div *ngIf="filteredCouncilProposals.length > 0">
+                    <div class="top-line" *ngFor="let councilProposal of filteredCouncilProposals">
+                      <ion-card-header>
+                        <ion-card-subtitle>
+                          <div class="proposalHeader">
+                            <ion-avatar>
+                              <ion-img class="avatar-sm" src="assets/icon/logo.png"></ion-img>
+                            </ion-avatar>
+                            <ion-text>by: {{councilProposal.author}}</ion-text>
+                            <ion-badge [color]="getColor(councilProposal)">{{councilProposal.status}}</ion-badge>
+                          </div>
+                        </ion-card-subtitle>
+                        <a [routerLink]="['proposal', councilProposal.consensus_timestamp, councilProposal.type]">
+                          <ion-card-title color="secondary" class="top-title top-space">{{councilProposal.title}}</ion-card-title>
+                        </a>
+                      </ion-card-header>
+    
+                      <ion-card-content>
+                        <p>
+                          <ion-text> {{councilProposal.description}} </ion-text>
+                        </p>
+    
+                        <div class="top-space  bot-space">
+                          <ion-text>
+                            <ion-icon name="ellipse" class="ellipse" [color]="getColor(councilProposal)" ></ion-icon>
+                            {{councilProposal.status}}, {{councilProposal.latestStatistics.votes}} Votes
+                          </ion-text>
+                        </div>
+                      </ion-card-content>
+    
+                    </div>
+                  </div>
+
+                  <div *ngIf="isLoading">
+                    <div class="top-line">
+                      <ion-card-header>
+                        <ion-card-subtitle>
+                          <div class="proposalHeader">
+                            <ion-avatar>
+                              <ion-skeleton-text animated style="background-color: white;"></ion-skeleton-text>
+                            </ion-avatar>
+                            <ion-text><ion-skeleton-text animated style="width: 60%"></ion-skeleton-text></ion-text>
+                            <ion-text><ion-skeleton-text animated style="width: 30%"></ion-skeleton-text></ion-text>
+                          </div>
+                        </ion-card-subtitle>
+                        <ion-card-title color="secondary" class="top-title top-space">
+                          <ion-skeleton-text animated style="width: 75%"></ion-skeleton-text>
+                        </ion-card-title>
+                      </ion-card-header>
+    
+                      <ion-card-content>
+                        <p>
+                          <ion-text>
+                            <p><ion-skeleton-text animated style="width: 75%"></ion-skeleton-text></p>
+                            <p><ion-skeleton-text animated style="width: 55%"></ion-skeleton-text></p>
+                            <p><ion-skeleton-text animated style="width: 80%"></ion-skeleton-text></p>
+                            <p><ion-skeleton-text animated style="width: 45%"></ion-skeleton-text></p>
+                          </ion-text>
+                        </p>
+    
+                        <div class="top-space  bot-space">
+                          <ion-text>
+                            <ion-icon name="ellipse" class="ellipse" color="primary" ></ion-icon>
+                            <ion-skeleton-text animated style="width: 45%"></ion-skeleton-text>
+                          </ion-text>
+                        </div>
+                      </ion-card-content>
+    
+                    </div>
+                  </div>
+                </div>                
+              </div>
+
+            </ion-card>
+          </div>
+
+          <div *ngSwitchCase="'newProposal'">
+            <form action="">
+              <ion-card class="cards_DAO">
+              <ion-card-header class="headerSegment bottom-line flex">
+                <div class="center-left">
+                  <ion-card-title class="top-title">New Proposal</ion-card-title>
+                </div>
+              </ion-card-header>
+
+              <ion-card-content>
+
+                <div class="top-space">
+                  <ion-label class="label" position="stacked">Title</ion-label>
+                  <ion-item class="round-item">
+                    <ion-input placeholder="Proposal Title" name="title" [(ngModel)]="newProposal.title"></ion-input>
+                  </ion-item>
+                </div>
+
+                <div class="top-space">
+                  <ion-label class="label" position="stacked">Description</ion-label>
+                  <ion-item class="round-item">
+                    <ion-textarea placeholder="Proposal description" autoGrow="false" maxlength="150" rows="8" name="description" [(ngModel)]="newProposal.description">
+                    </ion-textarea>
+                  </ion-item>
+                </div>
+
+                <div class="top-space">
+                  <ion-label class="label" position="stacked">Content</ion-label>
+                  <ion-item class="round-item">
+                    <ion-textarea placeholder="Proposal content" autoGrow="false" maxlength="1000" rows="8" name="content" [(ngModel)]="newProposal.content">
+                    </ion-textarea>
+                  </ion-item>
+                </div>
+
+                <div class="vote-options top-space">
+                  <ion-label class="label" position="stacked">Vote Options</ion-label>
+                  <ion-item class="round-item" style="margin-top:10px;" *ngFor="let option of newProposal.options; let i=index">
+                    <ion-input placeholder="Option {{i+1}}" [name]="'option'+ i+1" [(ngModel)]="newProposal.options[i].name"></ion-input>
+                  </ion-item>
+
+                  <div style=" font-size: 15px;">
+                    <ion-button class="add-option" fill="clear" color="primary" (click)="addOption(1)" [disabled]="moreIndex == settings.choices.max">
+                      <ion-icon name="add-circle-outline"></ion-icon>
+                      Add
+                    </ion-button>
+
+                    <ion-button class="remove-option" fill="clear" color="primary" (click)="addOption(0)" [disabled]="moreIndex == settings.choices.min">
+                      <ion-icon name="remove-circle-outline"></ion-icon>
+                      Remove
+                    </ion-button>
+                  </div>
+                </div>
+
+                <div class="dateStart">
+                  <ion-item class="top-space round-item" (click)="startShowPicker = !startShowPicker" style="font-size: 12px;">
+                    <ion-icon icon="calendar-outline" slot="start" color="primary" style="font-size: 20px;"></ion-icon>
+                    <ion-label>Start Date</ion-label>
+                    <ion-text slot="end"></ion-text>
+                    {{newProposal.start_date.format('MM-DD-YYYY HH:mm')}}
+                  </ion-item>
+                  <ion-datetime *ngIf="startShowPicker"
+                  #datetime
+                  [min]="newProposal.start_date.format('YYYY-MM-DDTHH:mm:ss')"
+                  [value]="newProposal.start_date.format('YYYY-MM-DDTHH:mm:ss')" size="cover"
+                  (ionChange)="startDateChanged(datetime.value)"
+                  showDefaultButtons="true"
+                  (ionCancel)="startShowPicker = false;">
+                  </ion-datetime>
+                </div>
+
+                <div class="dateEnd">
+                  <ion-item class="top-space round-item" (click)="endShowPicker = !endShowPicker"style=" font-size: 12px;">
+                    <ion-icon icon="calendar-outline" slot="start" color="primary" style="font-size: 20px;"></ion-icon>
+                    <ion-label>End Date</ion-label>
+                    <ion-text slot="end"></ion-text>
+                    {{newProposal.end_date.format('MM-DD-YYYY HH:mm')}}
+                  </ion-item>
+                  <ion-datetime *ngIf="endShowPicker"
+                  #datetime
+                  [min]="newProposal.start_date.format('YYYY-MM-DDTHH:mm:ss')"
+                  [value]="newProposal.end_date.format('YYYY-MM-DDTHH:mm:ss')" size="cover"
+                  (ionChange)="endDateChanged(datetime.value)"
+                  showDefaultButtons="true"
+                  (ionCancel)="endShowPicker = false;">
+                  </ion-datetime>
+                </div>
+
+                <div class="top-space bot-space">
+                  <ion-button expand="block" (click)="createProposal()">Create Proposal</ion-button>
+                </div>
+
+              </ion-card-content>
+            </ion-card>
+            </form>
+          </div>
+
+        </div>
+
+      </ion-col>
+
+      <ion-col size="1" class="ion-hide-lg-down">
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>
+
+<ion-footer collapse="fade" translucent="true" class="ion-text-center">
+
+</ion-footer>

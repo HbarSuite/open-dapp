@@ -1,0 +1,162 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button id="show-node-details-nodes">
+        <ion-icon slot="icon-only" ios="pulse" md="pulse"></ion-icon>
+      </ion-button>
+    </ion-buttons>   
+    <ion-title>Smart Nodes</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-popover trigger="show-node-details-nodes" triggerAction="click">
+  <ng-template>
+    <ion-content [innerHTML]="getNodeDetails()" class="ion-padding">
+    </ion-content>
+  </ng-template>
+</ion-popover>
+
+<ion-content color="tertiary">
+  <ion-grid>  
+    <ion-row>
+      <ion-col size="3" class="ion-hide-lg-down">
+      </ion-col>
+      <ion-col size-md>
+        <ion-card>
+          <ion-card-header style="padding-bottom: 0px;" color="secondary">
+            <ion-card-subtitle color="secondary">
+              <ion-chip color="success">
+                <ion-icon name="cloud-done-outline"></ion-icon>
+                <ion-label>Network is Online</ion-label>
+              </ion-chip>
+            </ion-card-subtitle>
+            <ion-card-title color="primary">Smart Nodes</ion-card-title>
+          </ion-card-header>
+        
+          <ion-card-content style="padding: 0px;" color="secondary">
+            <ion-item slot="header" color="secondary">
+              <ion-label class="ion-text-wrap">
+                <p>HSuite Testnet Network is running on 4 different nodes to showcase our technology.</p>
+                <p>Mainnet Network will be released soon, to let our technology become 100% decentralized.</p>
+              </ion-label>
+            </ion-item>
+            <ion-accordion-group>
+              <ion-accordion toggle-icon="arrow-down-circle">
+                <ion-item slot="header" color="secondary">
+                  <ion-label>Network Details</ion-label>
+                </ion-item>
+            
+                <ion-list slot="content" *ngIf="nodesOnline.size > 0">
+                  <ion-card *ngFor="let node of nodesOnline | keyvalue" style="margin-top: 0px;">
+                    <ion-card-header>
+                      <ion-card-subtitle>
+                        <ion-chip color="success" *ngIf="node.value.online">
+                          <ion-icon name="cloud-done-outline"></ion-icon>
+                          <ion-label>Online</ion-label>
+                        </ion-chip>
+                        <ion-chip color="danger" *ngIf="!node.value.online">
+                          <ion-icon name="cloud-offline-outline"></ion-icon>
+                          <ion-label>Offline</ion-label>
+                        </ion-chip>
+                      </ion-card-subtitle>
+                      <ion-card-title color="primary">
+                        <h1>{{node.value.node.url.replace('https://', '').replace('.hbarsuite.network', '')}}</h1>
+                        <ion-text color="dark">
+                          <h3><b>Operator</b>: {{node.value.node.operator}}</h3>
+                          <p>{{node.value.node.url}}</p>
+                        </ion-text>
+                      </ion-card-title>
+                    </ion-card-header>
+                  </ion-card>
+                </ion-list>
+
+                <ion-list *ngIf="nodesOnline.size == 0">
+                  <ion-card *ngFor="let node of place_holders">
+                    <ion-card-header>
+                      <ion-card-subtitle color="secondary">
+                        <ion-skeleton-text animated style="width: 20%"></ion-skeleton-text>
+                      </ion-card-subtitle>
+                      <ion-card-title color="primary">
+                        <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
+                        <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+                      </ion-card-title>
+                    </ion-card-header>
+                    <ion-card-content>
+                      <ion-label>
+                        <h3><ion-skeleton-text animated style="width: 40%"></ion-skeleton-text></h3>
+                        <h3><ion-skeleton-text animated style="width: 60%"></ion-skeleton-text></h3>
+                      </ion-label>
+                    </ion-card-content>
+                  </ion-card>
+                </ion-list>
+              </ion-accordion>
+            </ion-accordion-group>
+          </ion-card-content>
+        </ion-card>
+      
+        <ion-card>
+          <ion-card-header color="secondary">
+            <ion-card-subtitle color="secondary">How it Works</ion-card-subtitle>
+            <ion-card-title color="primary">Technology Stack</ion-card-title>
+          </ion-card-header>
+        
+          <ion-card-content style="padding-top: 5px;">
+            <ion-list style="padding: 0px;">
+              <ion-item>
+                <ion-avatar class="avatar">
+                  <img src="assets/icon/nestjs.png">
+                </ion-avatar>
+                <ion-label class="ion-text-wrap">
+                  <h3>NestJS</h3>
+                  <p>NestJS is a framework for building efficient and scalable Node.js server-side applications built with and fully supporting TypeScript.</p>
+                </ion-label>
+              </ion-item>
+              <ion-item>
+                <ion-avatar class="avatar">
+                  <img src="assets/icon/hbar.png">
+                </ion-avatar>
+                <ion-label class="ion-text-wrap">
+                  <h3>Hedera js-SDK</h3>
+                  <p>Hedera offers Software Development Kits to facilitate the interaction between server-side applications and the Hedera Network.</p>
+                </ion-label>
+              </ion-item>
+              <ion-item>
+                <ion-avatar class="avatar">
+                  <img src="assets/icon/docker.png">
+                </ion-avatar>
+                <ion-label class="ion-text-wrap">
+                  <h3>Docker</h3>
+                  <p>A container is a standard unit of software that packages up code and all its dependencies so the application runs quickly and reliably from one computing environment to another.</p>
+                </ion-label>
+              </ion-item>                
+            </ion-list>
+          </ion-card-content>
+        </ion-card>
+      
+        <ion-card>
+          <ion-card-header color="secondary">
+            <ion-card-subtitle color="secondary">Our path to</ion-card-subtitle>
+            <ion-card-title color="primary">Decentralization</ion-card-title>
+          </ion-card-header>
+        
+          <ion-card-content style="padding-top: 5px;">
+            <p>Similarly to Hedera's path to decentralization, the Smart-Nodes will be, initially, a White-Listed group of HSUITE Validators. This ensures coherence in state-changes within the Network by holding a Node-Key, leveraging the Hedera native services (HFS, HCS). 
+              Moreover, every validator will receive reputation tokens <ion-text color="primary">$KARMA</ion-text> redeemable for <ion-text color="primary">$HSUITE</ion-text>, based on the Proof-of-Reputation (POR) and Gossip Protocol.
+            </p>
+            <br/>
+            <ion-text color="secondary">"If a node decides to change the State of the Network by tampering the Source Code, the other nodes will be aware of it and notify the network of attempted maliciousness. This way, if a node keeps acting malicious, it can be Black-Listed and have the Node-Key deactivated."</ion-text>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+      <ion-col size="3" class="ion-hide-lg-down">
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>
+
+<ion-footer collapse="fade" translucent="true" class="ion-text-center">
+
+</ion-footer>

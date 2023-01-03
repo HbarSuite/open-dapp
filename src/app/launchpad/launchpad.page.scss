@@ -1,0 +1,48 @@
+ion-skeleton-text {
+  --background-rgb: 255, 255, 255;
+}
+
+.token_details {
+  margin-top: 15px;
+  padding-top: 15px;
+  border-top: 1px solid white;
+  padding-bottom: 15px;
+  margin-bottom: 15px;
+  border-bottom: 1px solid white;
+}
+
+ion-grid {
+  padding: 0px;
+}
+
+.search {
+  background-color: #5221c4;
+  padding: 0px 7px;
+  position: fixed;
+  width: 100%;
+  z-index: 1;
+  top: 1;
+}
+
+ion-card {
+  margin-bottom: 0px;
+  margin-top: 0px;
+}
+
+ion-progress-bar {
+  height: 10px;
+  border-radius: 20px;
+}
+
+.avatar {
+  border-radius: 50%;
+  box-shadow: 0px 0px 10px #dbdfe2;
+}
+
+.title {
+  text-shadow: 0px 0px 10px #dbdfe2;
+}
+
+ion-popover {
+  --offset-x: -4px;
+}

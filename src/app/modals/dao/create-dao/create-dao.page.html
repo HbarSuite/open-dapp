@@ -1,0 +1,261 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Create DAO</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="closeModal()">Close</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-align-items-center ion-text-center" color="secondary">
+  <ion-slides #slides pager="true" [options]="sliderConfig">
+    <ion-slide>
+      <ion-grid>
+        <ion-row>
+          <ion-col size="10" class="center-column">
+            <div class="flex">
+              <img style="width: 30%; border-radius: 50%;" [src]="generateImageUrl()" alt="img"/>
+            </div>
+
+            <div class="top-space divisor">
+              <ion-card-title color="light" class="title"> Create a DAO </ion-card-title>
+              <ion-card-subtitle color="light" class="subtitle"> Create your own DAO now and start making decisions! </ion-card-subtitle>
+            </div>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col size="10" class="center-column">
+            <form class="modalForm">
+              <div class="top-space round-div">
+                <ion-item lines="none" color="secondary">
+                  <ion-label>Logo Url</ion-label>                    
+                </ion-item>
+
+                <ion-item class="round-item">
+                  <ion-input name="image" [(ngModel)]="dao.image" required="true" placeholder="Logo Url"></ion-input>
+                </ion-item>
+              </div>
+
+              <div class="top-space round-div">
+                <ion-item lines="none" color="secondary">
+                  <ion-label>Token ID</ion-label>
+                </ion-item>                
+                
+                <ion-item class="round-item">
+                  <ion-input name="tokenId" [(ngModel)]="dao.tokenId" required="true" placeholder="Token ID"></ion-input>
+                </ion-item>
+              </div>
+    
+              <div class="top-space round-div">
+                <ion-list>
+                  <ion-item lines="none" color="secondary">
+                    <ion-label>
+                      DAO Model
+                    </ion-label>
+                    <ion-badge slot="end" (click)="openHelpAlert()">
+                      help
+                    </ion-badge>                    
+                  </ion-item>
+
+                  <ion-item class="round-item" style="margin-bottom: 15px;">
+                    <ion-select [(ngModel)]="dao.model" name="model"
+                    interface="popover" placeholder="Classic / Limited">
+                      <ion-select-option value="classic">Classic</ion-select-option>
+                      <ion-select-option value="limited">Limited</ion-select-option>
+                    </ion-select>
+                  </ion-item>
+                </ion-list>
+              </div>
+    
+              <div class="top-space divisor"></div>
+    
+              <div class="top-space round-div">
+                <ion-button expand="block" (click)="validateDao()">Next</ion-button>
+              </div>
+            </form>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-slide>
+
+    <ion-slide>
+      <ion-grid>
+        <ion-row>
+          <ion-col size="10" class="center-column">
+            <div class="flex">
+              <img style="width: 30%; border-radius: 50%;" [src]="generateImageUrl()" alt="img"/>
+            </div>
+
+            <div class="top-space divisor">
+              <ion-card-title color="light" class="title"> DAO Details </ion-card-title>
+              <ion-card-subtitle color="light" class="subtitle"> Tell us something about your project, this text will appear in your about section </ion-card-subtitle>
+            </div>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col size="10" class="center-column">
+            <form class="modalForm">
+              <div class="top-space round-div">
+                <ion-item lines="none" color="secondary">
+                  <ion-label>About {{tokenInfos.name}}</ion-label>
+                </ion-item>
+                
+                <ion-item class="round-item">
+                  <ion-textarea name="about" [(ngModel)]="dao.about" required="true" placeholder="Enter more information here..." max="1024"></ion-textarea>
+                </ion-item>
+              </div>
+    
+              <div class="top-space divisor"></div>
+    
+              <div class="top-space round-div">
+                <ion-button expand="block" (click)="setupAbout()">Next</ion-button>
+              </div>
+            </form>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-slide>
+
+    <ion-slide>
+      <!-- *ngIf="dao.model == 'limited'" -->
+      <ion-grid>
+        <ion-row>
+          <ion-col size="10" class="center-column">
+            <div class="flex">
+              <img style="width: 30%; border-radius: 50%;" [src]="generateImageUrl()" alt="img"/>
+            </div>
+
+            <div class="top-space divisor">
+              <ion-card-title color="light" class="title"> DAO Council </ion-card-title>
+              <ion-card-subtitle color="light" class="subtitle"> Your Council members will be the ones holding the NFT you setup </ion-card-subtitle>
+            </div>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col size="10" class="center-column">
+            <form class="modalForm">
+              <div class="top-space round-div">
+                <ion-item lines="none" color="secondary">
+                  <ion-label>Council's NFT ID</ion-label>
+                </ion-item>
+                
+                <ion-item class="round-item">
+                  <ion-input name="councilNftId" [(ngModel)]="dao.limited.councilNftId" required="true" placeholder="NFT ID"></ion-input>
+                </ion-item>
+              </div>
+    
+              <div class="top-space divisor"></div>
+    
+              <div class="top-space round-div">
+                <ion-button expand="block" (click)="setupCouncil()">Next</ion-button>
+              </div>
+            </form>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-slide>
+
+    <ion-slide>
+      <ion-grid>
+        <ion-row>
+          <ion-col size="10" class="center-column">
+            <div class="flex">
+              <img style="width: 30%; border-radius: 50%;" [src]="generateImageUrl()" alt="img"/>
+            </div>
+            
+            <div class="top-space divisor">
+              <ion-card-title color="light" class="title"> Token Details </ion-card-title>
+              <ion-card-subtitle color="light" class="subtitle"> Please double check if all the information is correct.  </ion-card-subtitle>
+            </div>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col size="10" class="center-column">
+            <ion-list *ngIf="tokenInfos">
+              <ion-item color="secondary">
+                <ion-label><b>TokenID:</b> {{tokenInfos.token_id}}</ion-label>
+              </ion-item>              
+              <ion-item color="secondary">
+                <ion-label><b>Name:</b> {{tokenInfos.name}}</ion-label>
+              </ion-item>
+              <ion-item color="secondary">
+                <ion-label><b>Memo:</b> {{tokenInfos.memo}}</ion-label>
+              </ion-item>
+              <ion-item color="secondary">
+                <ion-label><b>Treasury:</b> {{tokenInfos.treasury_account_id}}</ion-label>
+              </ion-item>
+              <ion-item color="secondary">
+                <ion-label><b>Type:</b> {{tokenInfos.type}}</ion-label>
+              </ion-item>
+              <ion-item color="secondary">
+                <ion-label><b>DAO Model:</b> {{dao.model}}</ion-label>
+              </ion-item>    
+              <ion-item color="secondary" *ngIf="dao.model == 'limited' && councilInfos">
+                <ion-label><b>DAO Council:</b> {{councilInfos.name}} ({{councilInfos.token_id}})</ion-label>
+              </ion-item>      
+              <ion-item color="secondary">
+                <ion-label><b>About this DAO:</b> {{dao.about}}</ion-label>
+              </ion-item>                    
+            </ion-list>
+
+            <div class="top-space round-div">
+              <ion-button expand="block" (click)="confirmDao()">Next</ion-button>
+            </div>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-slide>
+
+    <ion-slide>
+      <ion-grid>
+        <ion-row>
+          <ion-col size="10" class="center-column">
+            <div class="flex">
+              <img style="width: 30%; border-radius: 50%;" [src]="generateImageUrl()" alt="img"/>
+            </div>
+            
+            <div class="top-space divisor">
+              <ion-card-title color="light" class="title"> Create DAO </ion-card-title>
+              <ion-card-subtitle color="light" class="subtitle"> Are you ready to go? </ion-card-subtitle>
+              <ion-label>Please keep in mind that the information will be stored on HCS, and it is immutable.</ion-label>
+            </div>
+
+            <div class="top-space round-div">
+              <ion-button expand="block" (click)="createDao()">Create DAO</ion-button>
+            </div>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-slide>
+
+    <ion-slide>
+      <ion-grid>
+        <ion-row>
+          <ion-col size="10" class="center-column">
+            <div class="flex">
+              <img style="width: 30%; border-radius: 50%;" [src]="generateImageUrl()" alt="img"/>
+            </div>
+            
+            <div class="top-space divisor">
+              <ion-card-title color="light" class="title">{{tokenInfos.name}}</ion-card-title>
+              <ion-card-subtitle color="light" class="subtitle">{{tokenInfos.memo}}</ion-card-subtitle>
+              <ion-label>Your DAO has been successfully created, share the direct link and invite your community to be part of it!</ion-label>
+            </div>
+
+            <div class="top-space round-div">
+              <ion-button color="primary" expand="block" (click)="shareDao()">
+                <ion-icon slot="start" name="share-outline"></ion-icon>
+                Share Link
+              </ion-button>
+              <ion-button style="margin-top: 15px;" color="tertiary" expand="block" (click)="completeDao()">
+                <ion-icon slot="start" name="checkmark-done-outline"></ion-icon>
+                Complete
+              </ion-button>
+            </div>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-slide>
+  </ion-slides>
+
+</ion-content>

@@ -1,0 +1,22 @@
+<ion-header>
+  <ion-toolbar color="secondary">
+    <ion-title>Connect Wallet</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="closeModal()">Close</ion-button>
+    </ion-buttons>    
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-align-items-center ion-text-center" color="secondary">
+  <ion-item color="secondary">
+    <ion-label>{{pairingString}}</ion-label>
+    <ion-button shape="round" (click)="writeToClipboard(pairingString)">Click to Copy</ion-button>
+  </ion-item>
+
+  <ngx-qrcode
+    [value]="pairingString"
+  >
+  </ngx-qrcode>
+    
+    <ion-button shape="round" (click)="closeModal()">OK</ion-button>
+</ion-content>

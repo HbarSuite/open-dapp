@@ -1,0 +1,408 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>DAO</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content color="secondary">
+  <ion-grid *ngIf="isLoggedIn">
+    <ion-row>
+      <ion-col size="1" class="ion-hide-lg-down">
+      </ion-col>
+
+      <ion-col size-md>
+          <div>
+            <div class="top-space">
+              <button ion-button icon-only class="back-icon" (click)="goBack()">
+                <ion-icon name="arrow-back-outline" style="font-size:18px"></ion-icon>
+                <p class="back-text">Back</p>
+              </button>
+            </div>
+
+            <ion-card class="cards_DAO" *ngIf="proposal == null">
+              <div>
+                <ion-card-header>
+                  <div class="divisor">
+                    <ion-card-title class="header-title">DAO PROPOSAL</ion-card-title>
+                  </div>
+                  <ion-card-title color="secondary" class="top-title top-space">
+                    <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
+                    <ion-skeleton-text animated style="width: 65%"></ion-skeleton-text>
+                  </ion-card-title>
+                  <ion-list>
+                    <ion-item>
+                      <ion-skeleton-text animated style="width: 85%"></ion-skeleton-text>
+                    </ion-item>
+                    <ion-item>
+                      <ion-skeleton-text animated style="width: 85%"></ion-skeleton-text>
+                    </ion-item>
+                  </ion-list>                  
+                  <ion-card-subtitle>
+                    <div class="subtitle-div">
+                      <div class="subtitle-div2">
+                        <ion-avatar class="mini-avatar">
+                          <ion-skeleton-text animated style="background-color: white;"></ion-skeleton-text>
+                        </ion-avatar>
+                      </div>
+                    </div>
+                  </ion-card-subtitle>
+                </ion-card-header>
+
+                <ion-card-content class="align-center">
+                  <div class="container" [class.show]="show">
+                    <ion-text style="color:rgb(36, 36, 36);">
+                      <p>
+                        <ion-skeleton-text animated style="width: 50%"></ion-skeleton-text>
+                      </p>
+                      <p>
+                        <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
+                      </p>
+                      <p>
+                        <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+                      </p>
+                    </ion-text>
+                  </div>
+                </ion-card-content>
+
+              </div>
+            </ion-card>            
+
+            <ion-card class="cards_DAO" *ngIf="proposal != null">
+              <div>
+                <ion-card-header>
+                  <div class="divisor">
+                    <ion-card-title class="header-title">{{dao.name.toUpperCase()}} PROPOSAL</ion-card-title>
+                  </div>
+                  <ion-card-title color="secondary" class="top-title top-space">{{proposal.title}}</ion-card-title>
+                  <ion-list>
+                    <ion-item>
+                      <ion-label class="txt-label">Start Date</ion-label>
+                      <p>{{formatDate(proposal.start_date)}}</p>
+                    </ion-item>
+                    <ion-item>
+                      <ion-label class="txt-label">End Date</ion-label>
+                      <p>{{formatDate(proposal.end_date)}}</p>
+                    </ion-item>
+                  </ion-list>                  
+                  <ion-card-subtitle>
+                    <div class="subtitle-div">
+                      <div class="subtitle-div2">
+                        <ion-badge [color]="getColor(proposal)" class="status-badge">{{proposal.status}}</ion-badge>
+                        <ion-avatar class="mini-avatar"><ion-img src="assets/icon/logo.png" class="justify-center"></ion-img></ion-avatar>
+                        <ion-text class="small-title">by {{proposal.author}}</ion-text>
+                      </div>
+                    </div>
+                  </ion-card-subtitle>
+                </ion-card-header>
+
+                <ion-card-content class="align-center">
+                  <div class="container" [class.show]="show">
+                    <ion-text style="color:rgb(36, 36, 36);" [innerHtml]="proposal.content">
+                      <!-- {{proposal.content}} -->
+                    </ion-text>
+                  </div>
+                  <div class="gradient"><ion-button expand="block" class="showbtn"  (click)="show = !show">{{ show ? 'Show less': 'Show More' }}</ion-button></div>
+                </ion-card-content>
+
+              </div>
+            </ion-card>
+
+            <div *ngIf="proposal == null">
+              <ion-card class="cards_proposal">
+                <ion-card-header class="divisor">
+                  <ion-card-title class="align-center">Cast your vote</ion-card-title>
+                </ion-card-header>
+                <ion-card-content >
+
+                  <div class="justify-center">
+                    <ion-button expand="block" class="vote-btn">
+                      <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
+                    </ion-button>
+                    <ion-button expand="block" class="vote-btn">
+                      <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
+                    </ion-button>
+                    <ion-button expand="block" class="vote-btn">
+                      <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
+                    </ion-button>                                        
+                  </div>
+
+                  <div>
+                    <ion-button disabled expand="block" class="vote-btn-submit">loading snapshot...</ion-button>
+                  </div>
+
+                </ion-card-content>
+              </ion-card>
+
+              <ion-card class="cards_proposal">
+                <ion-card-header class="divisor">
+                  <ion-card-title class="align-center">Current results</ion-card-title>
+                </ion-card-header>
+                <ion-card-content>
+                  <div>
+                    <div class="bot-space10">
+                      <div class="space-between">
+                        <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
+                      </div>
+                      <ion-progress-bar color="tertiary" [value]="0.25"></ion-progress-bar>
+                    </div>
+                    <div class="bot-space10">
+                      <div class="space-between">
+                        <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
+                      </div>
+                      <ion-progress-bar color="tertiary" [value]="0.35"></ion-progress-bar>
+                    </div>
+                    <div class="bot-space10">
+                      <div class="space-between">
+                        <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
+                      </div>
+                      <ion-progress-bar color="tertiary" [value]="0.40"></ion-progress-bar>
+                    </div>                                        
+                  </div>
+
+                </ion-card-content>
+              </ion-card>
+
+              <ion-card class="cards_proposal">
+                <ion-card-header class="divisor">
+                  <ion-card-title>Votes</ion-card-title>
+                </ion-card-header>
+                <ion-card-content>
+                  <ion-list slot="content" class="containerVotes" [class.show]="showVotes">
+                    <ion-item>
+                      <ion-avatar slot="start" class="committee-avatar">
+                        <ion-skeleton-text animated></ion-skeleton-text>
+                      </ion-avatar>
+                      <ion-label class="space-between">
+                        <ion-grid>
+                          <ion-row>
+                            <ion-col size="4" class="text-wrap">
+                              <ion-skeleton-text animated style="width: 30%"></ion-skeleton-text>
+                            </ion-col>
+                            <ion-col size="4" class="text-wrap">
+                              <h3 style="text-align: center;">
+                                <ion-skeleton-text animated style="width: 30%"></ion-skeleton-text></h3>
+                            </ion-col>
+                            <ion-col size="4" class="text-wrap">
+                              <h3 style="text-align: end;">
+                                <ion-skeleton-text animated style="width: 30%"></ion-skeleton-text></h3>
+                            </ion-col>
+                          </ion-row>
+                        </ion-grid>
+                      </ion-label>
+                    </ion-item>
+                    <ion-item>
+                      <ion-avatar slot="start" class="committee-avatar">
+                        <ion-skeleton-text animated></ion-skeleton-text>
+                      </ion-avatar>
+                      <ion-label class="space-between">
+                        <ion-grid>
+                          <ion-row>
+                            <ion-col size="4" class="text-wrap">
+                              <ion-skeleton-text animated style="width: 30%"></ion-skeleton-text>
+                            </ion-col>
+                            <ion-col size="4" class="text-wrap">
+                              <h3 style="text-align: center;">
+                                <ion-skeleton-text animated style="width: 30%"></ion-skeleton-text></h3>
+                            </ion-col>
+                            <ion-col size="4" class="text-wrap">
+                              <h3 style="text-align: end;">
+                                <ion-skeleton-text animated style="width: 30%"></ion-skeleton-text></h3>
+                            </ion-col>
+                          </ion-row>
+                        </ion-grid>
+                      </ion-label>
+                    </ion-item>
+                    <ion-item>
+                      <ion-avatar slot="start" class="committee-avatar">
+                        <ion-skeleton-text animated></ion-skeleton-text>
+                      </ion-avatar>
+                      <ion-label class="space-between">
+                        <ion-grid>
+                          <ion-row>
+                            <ion-col size="4" class="text-wrap">
+                              <ion-skeleton-text animated style="width: 30%"></ion-skeleton-text>
+                            </ion-col>
+                            <ion-col size="4" class="text-wrap">
+                              <h3 style="text-align: center;">
+                                <ion-skeleton-text animated style="width: 30%"></ion-skeleton-text></h3>
+                            </ion-col>
+                            <ion-col size="4" class="text-wrap">
+                              <h3 style="text-align: end;">
+                                <ion-skeleton-text animated style="width: 30%"></ion-skeleton-text></h3>
+                            </ion-col>
+                          </ion-row>
+                        </ion-grid>
+                      </ion-label>
+                    </ion-item>          
+                    <ion-item>
+                      <ion-avatar slot="start" class="committee-avatar">
+                        <ion-skeleton-text animated></ion-skeleton-text>
+                      </ion-avatar>
+                      <ion-label class="space-between">
+                        <ion-grid>
+                          <ion-row>
+                            <ion-col size="4" class="text-wrap">
+                              <ion-skeleton-text animated style="width: 30%"></ion-skeleton-text>
+                            </ion-col>
+                            <ion-col size="4" class="text-wrap">
+                              <h3 style="text-align: center;">
+                                <ion-skeleton-text animated style="width: 30%"></ion-skeleton-text></h3>
+                            </ion-col>
+                            <ion-col size="4" class="text-wrap">
+                              <h3 style="text-align: end;">
+                                <ion-skeleton-text animated style="width: 30%"></ion-skeleton-text></h3>
+                            </ion-col>
+                          </ion-row>
+                        </ion-grid>
+                      </ion-label>
+                    </ion-item>
+                    <ion-item>
+                      <ion-avatar slot="start" class="committee-avatar">
+                        <ion-skeleton-text animated></ion-skeleton-text>
+                      </ion-avatar>
+                      <ion-label class="space-between">
+                        <ion-grid>
+                          <ion-row>
+                            <ion-col size="4" class="text-wrap">
+                              <ion-skeleton-text animated style="width: 30%"></ion-skeleton-text>
+                            </ion-col>
+                            <ion-col size="4" class="text-wrap">
+                              <h3 style="text-align: center;">
+                                <ion-skeleton-text animated style="width: 30%"></ion-skeleton-text></h3>
+                            </ion-col>
+                            <ion-col size="4" class="text-wrap">
+                              <h3 style="text-align: end;">
+                                <ion-skeleton-text animated style="width: 30%"></ion-skeleton-text></h3>
+                            </ion-col>
+                          </ion-row>
+                        </ion-grid>
+                      </ion-label>
+                    </ion-item>
+                    <ion-item>
+                      <ion-avatar slot="start" class="committee-avatar">
+                        <ion-skeleton-text animated></ion-skeleton-text>
+                      </ion-avatar>
+                      <ion-label class="space-between">
+                        <ion-grid>
+                          <ion-row>
+                            <ion-col size="4" class="text-wrap">
+                              <ion-skeleton-text animated style="width: 30%"></ion-skeleton-text>
+                            </ion-col>
+                            <ion-col size="4" class="text-wrap">
+                              <h3 style="text-align: center;">
+                                <ion-skeleton-text animated style="width: 30%"></ion-skeleton-text></h3>
+                            </ion-col>
+                            <ion-col size="4" class="text-wrap">
+                              <h3 style="text-align: end;">
+                                <ion-skeleton-text animated style="width: 30%"></ion-skeleton-text></h3>
+                            </ion-col>
+                          </ion-row>
+                        </ion-grid>
+                      </ion-label>
+                    </ion-item>                                                                                           
+                  </ion-list>
+                </ion-card-content>
+              </ion-card>
+            </div>            
+
+            <div *ngIf="proposal != null">
+              <ion-card class="cards_proposal" *ngIf="proposal.status != 'closed' && proposal.status != 'approved'">
+                <ion-card-header class="divisor">
+                  <ion-card-title class="align-center">Cast your vote</ion-card-title>
+                </ion-card-header>
+                <ion-card-content >
+
+                  <div class="justify-center" *ngFor="let option of proposal.options; index as i">
+                    <ion-button [disabled]="!snapshot || hasVoted() || isVoting" expand="block" [ngClass]="selectedOption.value == option ? 'vote-btn click': 'vote-btn'" 
+                      (click)="selectOption(i)">{{option}}</ion-button>
+                  </div>
+
+                  <div>
+                    <ion-button [disabled]="!snapshot || snapshot.length == 0 || hasVoted() || isVoting || !selectedOption.value" expand="block" class="vote-btn-submit" (click)="voteProposal(proposal)">
+                      {{snapshot == null ? 'loading snapshot...' : (hasVoted() ? 'You voted already' : (isVoting ? 'Voting, please wait...' : 'Vote'))}}
+                    </ion-button>
+                  </div>
+
+                </ion-card-content>
+              </ion-card>
+
+              <ion-card class="cards_proposal">
+                <ion-card-header class="divisor">
+                  <ion-card-title class="align-center">Current results</ion-card-title>
+                </ion-card-header>
+                <ion-card-content>
+                  <div *ngFor="let result of proposal.latestStatistics.results | keyvalue">
+                    <div class="bot-space10">
+                      <div class="space-between">
+                        <ion-text>{{result.key}}</ion-text> <ion-text>{{calculateVotePercentage(proposal, result)}} %</ion-text>
+                      </div>
+                      <ion-progress-bar color="tertiary" [value]="calculateVoteProgressBar(proposal, result)"></ion-progress-bar>
+                    </div>
+                  </div>
+
+                </ion-card-content>
+              </ion-card>
+
+              <ion-card class="cards_proposal" *ngIf="showVotes && wallet">
+                <ion-card-header class="divisor">
+                  <ion-card-title>Votes <ion-badge color="medium">{{proposal.latestStatistics.votes}}</ion-badge></ion-card-title>
+                </ion-card-header>
+                <ion-card-content>
+                  <ion-list slot="content" class="containerVotes">
+                    <ion-item *ngFor="let vote of votes">
+                      <ion-avatar slot="start" class="committee-avatar">
+                        <img [src]="generateImageUrl(dao.image)">
+                      </ion-avatar>
+                      <ion-label class="space-between">
+                        <ion-grid>
+                          <ion-row>
+                            <ion-col size="8" class="text-wrap">
+                              <h3>{{vote.wallet}}</h3>
+                              <h2>{{vote.option}}</h2>
+                            </ion-col>
+                            <ion-col size="4" class="text-wrap">
+                              <h3 style="text-align: end;">{{((vote.weight / proposal.latestStatistics.weights) * 100).toFixed(2)}} %</h3>
+                            </ion-col>
+                          </ion-row>
+                        </ion-grid>
+                      </ion-label>
+                    </ion-item>
+                  </ion-list>
+                </ion-card-content>
+              </ion-card>
+            </div>
+          </div>
+      </ion-col>
+
+      <ion-col size="1" class="ion-hide-lg-down">
+      </ion-col>
+
+    </ion-row>
+  </ion-grid>
+
+  <div *ngIf="!isLoggedIn">
+    <div class="top-space">
+      <button ion-button icon-only class="back-icon" (click)="goBack()">
+        <ion-icon name="arrow-back-outline" style="font-size:18px"></ion-icon>
+        <p class="back-text">Back</p>
+      </button>
+    </div>
+    <ion-card color="light" class="cards_DAO ion-text-center">
+      <ion-card-header>
+        <div class="flex">
+          <ion-avatar class="avatar"><img [src]="generateImageUrl(dao.image)" alt="img"/></ion-avatar>
+        </div>
+        <ion-card-title class="title">{{dao.name}}</ion-card-title>
+        <ion-card-subtitle class="subtitle">{{dao.description}}</ion-card-subtitle>
+      </ion-card-header>
+
+      <ion-card-content>
+        Sorry, you must be logged in and authenticated in order to see this proposal and be eligible to vote.
+      </ion-card-content>
+    </ion-card>      
+  </div>
+</ion-content>
+

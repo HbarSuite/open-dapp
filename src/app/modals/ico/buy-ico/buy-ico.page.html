@@ -1,0 +1,67 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Buy ${{token.symbol}}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="closeModal()">Close</ion-button>
+    </ion-buttons>    
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-align-items-center ion-text-center" color="secondary">
+  <div *ngIf="token.launchpad.type == 'FUNGIBLE_COMMON'">
+    <ion-item color="secondary">
+      <ion-label>HBAR Amount</ion-label>
+      <ion-input min="0" type="number" onkeypress="return event.charCode >= 48 || event.charCode == 46" placeholder="insert an amount" (ionChange)="amountChanged($event)"></ion-input>
+    </ion-item>
+    <ion-item color="secondary">
+      <ion-label>You will receive {{formatNumber(tokenAmount)}}</ion-label>
+    </ion-item>
+  
+    <ion-avatar class="avatar">
+      <img [src]="token.image" />
+    </ion-avatar>
+
+    <div *ngIf="token.launchpad.calculatedFees">
+      <ion-text>Hsuite Fees: {{token.launchpad.calculatedFees}}</ion-text>
+    </div> 
+
+    <div *ngIf="discount">
+      <p style="margin-bottom: 0px;"><ion-label>You've got a {{discount * 100}}% discount!</ion-label></p>
+      <ion-text style="text-decoration: line-through;">{{token.launchpad.price}} {{getTokenSymbol()}}</ion-text>
+      <ion-text>&nbsp;{{calculateDiscount()}} {{getTokenSymbol()}}</ion-text>
+    </div>
+
+    <ion-button shape="round" (click)="sendBuy()">BUY</ion-button>    
+  </div>
+
+  <div *ngIf="token.launchpad.type == 'NON_FUNGIBLE_UNIQUE'">
+
+    <ion-card>
+      <!-- <ion-avatar class="avatar"> -->
+        <img [src]="token.launchpad.header" />
+      <!-- </ion-avatar> -->
+      
+      <ion-card-header>
+        <ion-card-subtitle>{{token.id}}</ion-card-subtitle>
+        <ion-card-title>{{token.name}}</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        You will receive a random NFT from this collection.
+      </ion-card-content>
+      <div *ngIf="token.launchpad.calculatedFees">
+        <ion-text>Hsuite Fees: {{token.launchpad.calculatedFees}}</ion-text>
+      </div>  
+      <ion-button shape="round" (click)="sendBuy()" style="padding-bottom: 10px;">
+        BUY for&nbsp;      
+        <div *ngIf="discount">
+          <ion-text style="text-decoration: line-through;">{{token.launchpad.price}} {{getTokenSymbol()}}</ion-text>
+          <ion-text>&nbsp;{{token.launchpad.price - (token.launchpad.price * discount)}} {{getTokenSymbol()}}</ion-text>
+        </div>
+        <div *ngIf="!discount">
+          <ion-text>{{token.launchpad.price}} {{getTokenSymbol()}}</ion-text>
+        </div>
+      </ion-button>  
+    </ion-card> 
+  </div>
+  
+</ion-content>

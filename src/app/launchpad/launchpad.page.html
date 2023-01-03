@@ -1,0 +1,206 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button id="show-node-details-launchpad">
+        <ion-icon slot="icon-only" ios="pulse" md="pulse"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Launchpad</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-popover trigger="show-node-details-launchpad" triggerAction="click">
+  <ng-template>
+    <ion-content [innerHTML]="getNodeDetails()" class="ion-padding">
+    </ion-content>
+  </ng-template>
+</ion-popover>
+
+<ion-toolbar color="tertiary">
+  <ion-searchbar #searchBar showClearButton="focus"
+  [debounce]="500" color="secondary" placeholder="Search"
+  mode="md" (ionChange)="onSearch($event)" [(ngModel)]="searchFilter">
+  </ion-searchbar>
+</ion-toolbar>
+<ion-toolbar color="tertiary">
+  <ion-segment style="width: 100%;" (ionChange)="segmentChanged($event)" [(ngModel)]="segment" scrollable="true" swipeGesture="true" class="top-space segment" mode="md">
+    <ion-segment-button value="running">
+      <ion-label>Running</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="sold_out">
+      <ion-label>Sold Out</ion-label>
+    </ion-segment-button>
+  </ion-segment>  
+</ion-toolbar>
+
+<ion-content color="tertiary">
+
+  <div *ngIf="tokens.length == 0 && place_holders.length > 0">
+    <ion-grid>
+      <ion-row *ngFor="let place_holder of place_holders" color="secondary">
+        <ion-col size="3" class="ion-hide-lg-down">
+        </ion-col>
+        <ion-col size-md>
+          <ion-card color="secondary">
+            <ion-card-header>
+              <ion-card-subtitle color="secondary">
+                <ion-skeleton-text color="primary" animated style="width: 50%"></ion-skeleton-text>
+              </ion-card-subtitle>
+              <ion-card-title color="primary">
+                <ion-skeleton-text animated style="width: 75%"></ion-skeleton-text>
+              </ion-card-title>
+            </ion-card-header>
+
+            <ion-card-content>
+              <ion-thumbnail slot="start">
+                <ion-skeleton-text animated></ion-skeleton-text>
+              </ion-thumbnail>
+              <ion-label>
+                <h3>
+                  <ion-skeleton-text animated style="width: 50%"></ion-skeleton-text>
+                </h3>
+                <p>
+                  <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
+                </p>
+                <p>
+                  <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+                </p>
+              </ion-label>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+        <ion-col size="3" class="ion-hide-lg-down">
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+
+  <div *ngIf="tokens.length == 0 && place_holders.length == 0">
+    <ion-grid>
+      <ion-row>
+        <ion-col size="3" class="ion-hide-lg-down">
+        </ion-col>
+        <ion-col size-md>
+          <ion-card>
+            <ion-card-header>
+              <ion-card-subtitle>Launchpad</ion-card-subtitle>
+              <ion-card-title>Come back later...</ion-card-title>
+            </ion-card-header>
+
+            <ion-card-content>
+              There is no token running on the launchpad at the moment.
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+        <ion-col size="3" class="ion-hide-lg-down">
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+
+  <div *ngIf="tokens.length > 0">
+    <ion-grid>
+      <ion-row *ngFor="let token of filteredTokens; index as index" color="secondary">
+        <ion-col size="3" class="ion-hide-lg-down">
+        </ion-col>
+        <ion-col size-md>
+          <ion-card color="secondary">
+            <ion-fab *ngIf="token.launchpad.infos" vertical="top" horizontal="end">
+              <ion-fab-button size="small" color="light" (click)="showDetails(token)">
+                <ion-icon name="information-circle-outline" color="tertiary"></ion-icon>
+              </ion-fab-button>
+            </ion-fab>
+
+            <ion-fab vertical="top" horizontal="start">
+              <ion-fab-button size="small" color="light" (click)="copyShareLink(token)">
+                <ion-icon name="share-outline" color="tertiary"></ion-icon>
+              </ion-fab-button>
+            </ion-fab>
+
+            <ion-card-header style="margin-top: 50px;">
+              <ion-card-subtitle color="secondary">
+                <ion-chip>
+                  <ion-label color="warning">Token Id: {{token.id.toString()}}</ion-label>
+                </ion-chip>
+                <ion-chip>
+                  <ion-label color="primary">Launchpad Wallet: {{token.launchpad.walletId.toString()}}</ion-label>
+                </ion-chip>
+              </ion-card-subtitle>
+
+              <ion-card-title color="primary">
+                <ion-text class="title">${{token.launchpad.tokenSymbol ? token.launchpad.tokenSymbol : token.symbol}}</ion-text>
+                <ion-chip *ngIf="token.launchpad.percentage == 100">
+                  <ion-label color="success">
+                    <ion-text class="title">SOLD OUT</ion-text>
+                  </ion-label>
+                </ion-chip>
+                <ion-chip *ngIf="token.launchpad.percentage < 100">
+                  <ion-label color="danger">
+                    <ion-text class="title">RUNNING</ion-text>
+                  </ion-label>
+                </ion-chip>
+              </ion-card-title>
+            </ion-card-header>
+
+            <ion-card-content>
+              <ion-thumbnail slot="start">
+                <img [src]="token.image" class="avatar" />
+              </ion-thumbnail>
+
+              <div class="token_details">
+                <ion-chip>
+                  <ion-label color="warning">Price: {{token.launchpad.price.toString()}} {{getTokenSymbol(token.launchpad)}}</ion-label>
+                </ion-chip>
+                <ion-chip color="primary" *ngIf="token.type == 'FUNGIBLE_COMMON'">
+                  <ion-label color="tertiary">Minimum Buy In: {{token.launchpad.min_buy_in.toString()}} {{getTokenSymbol(token.launchpad)}}</ion-label>
+                </ion-chip>
+                <ion-chip>
+                  <ion-label color="success">For Sale: {{token.launchpad.formattedAmount.toString()}}</ion-label>
+                </ion-chip>
+                <ion-chip>
+                  <ion-label color="primary">Available: {{token.launchpad.formattedAvailable.toString()}}</ion-label>
+                </ion-chip>
+                <ion-chip color="light" *ngIf="token.launchpad.calculatedFees">
+                  Hsuite Fees: {{token.launchpad.calculatedFees}}
+                </ion-chip>
+
+
+                <ion-chip *ngIf="token.launchpad.is_frozen">
+                  <ion-label color="warning">Frozen until live</ion-label>
+                </ion-chip>
+              </div>
+
+              <ion-progress-bar [value]="token.launchpad.percentage / 100"></ion-progress-bar>
+              <ion-button expand="block" (click)="BuyNow(token)" style="padding-top: 10px;">BUY NOW</ion-button>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+        <ion-col size="3" class="ion-hide-lg-down">
+        </ion-col>
+      </ion-row>
+
+      <ion-row *ngIf="searchNotFound == true">
+        <ion-col size="3" class="ion-hide-lg-down">
+        </ion-col>
+        <ion-col size-md>
+          <ion-card color="secondary" style="text-align: center;">
+            <ion-card-header>
+              <ion-card-subtitle>Launchpad</ion-card-subtitle>
+              <ion-card-title>Search not found...</ion-card-title>
+            </ion-card-header>
+
+            <ion-card-content>
+              The token you are looking for does not exist or is not available on the launchpad.
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+        <ion-col size="3" class="ion-hide-lg-down">
+        </ion-col>
+      </ion-row>
+
+    </ion-grid>
+  </div>
+</ion-content>

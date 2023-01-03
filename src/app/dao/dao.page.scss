@@ -1,0 +1,81 @@
+.avatar {
+  margin-right: 15px;
+}
+
+.committees {
+  margin-top: 15px;
+}
+
+.avatar {
+  border-radius: 50%;
+  box-shadow: 0px 0px 10px #9a0dff;
+  width: 100px;
+  height:100px;
+  margin: auto;
+  margin-bottom: 10px;
+}
+
+.cards_DAO {
+  border-style: solid;
+  border-width: 1px;
+  margin-bottom: 0px;
+  border-color: #4d3e71;
+  border-radius: 10px;
+  box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.4);
+}
+
+.cards_DAO:hover{
+  cursor: pointer;
+  border-color: #b9b5c2;
+}
+
+.center-left{
+  margin: auto;
+  margin-left: 0px;
+}
+
+.heightBtn{
+  height: 42px;
+  width: 48px;
+  margin: auto;
+  margin-right: 0px;
+  --padding-start:8px;
+  --padding-end:8px;
+}
+
+.divisor{
+  justify-content:center;
+  margin: auto;
+  text-align:center;
+  border-bottom: 1px solid white;
+
+  font-weight:bold;
+  color:white
+}
+
+.flex{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.title{
+  text-shadow: 0px 0px 5px #dbdfe2;
+  white-space: nowrap;
+  font-size: 20px;
+}
+
+.subtitle{
+  font-size: 14px;
+  color: gray;
+}
+
+
+ion-searchbar{
+--placeholder-color: white;
+--placeholder-opacity: 1;
+}
+
+ion-icon {
+  font-size: 32px;
+}

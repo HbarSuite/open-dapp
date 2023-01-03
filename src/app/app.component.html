@@ -1,0 +1,60 @@
+<ion-app>
+  <ion-split-pane contentId="main-content">
+    <ion-menu contentId="main-content" type="push">
+      <ion-content>
+        <ion-list id="inbox-list">
+          <ion-list-header>
+            <img src="assets/icon/hsuite_logo.png" width="40%">
+          </ion-list-header>
+
+          <ion-note>YOUR OWN LOGO HERE</ion-note>
+
+          <ion-menu-toggle auto-hide="false" *ngFor="let p of appPages; let i = index">
+            <ion-item routerDirection="root" [routerLink]="[p.url]" lines="none" detail="false" routerLinkActive="selected">
+              <ion-icon slot="start" [ios]="p.icon + '-outline'" [md]="p.icon + '-outline'"></ion-icon>
+              <ion-label>{{ p.title }}</ion-label>
+              <ion-badge [color]="p.color" *ngIf="p.badge">{{ p.badge }}</ion-badge>
+            </ion-item>
+          </ion-menu-toggle>
+
+        </ion-list>
+      </ion-content>
+      <ion-footer>
+        <ion-item>
+          <img src="assets/icon/hsuite_logo.png" width="60%">
+        </ion-item>
+        <ion-item>
+          <ion-note>Powered By HbarSuite</ion-note>
+        </ion-item>
+      </ion-footer>
+    </ion-menu>
+    <ion-router-outlet id="main-content"></ion-router-outlet>
+  </ion-split-pane>
+
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed" >
+    <ion-fab-button #hashpack style="position: relative;">
+      <ion-img src="assets/icon/hashpack.png" [ngStyle]="{'padding': '5px','opacity': '0.1', 'position': 'absolute', 'top': '0', 'left': '0'}"></ion-img>
+      <span  *ngIf="accountIds.length == 0" style="position: relative; z-index: 1; font-size: 14px; font-weight: bold;">Login</span>
+      <span  *ngIf="accountIds.length > 0" style="position: relative; z-index: 1; font-size: 12px; font-weight: bold;">Logout</span>
+    </ion-fab-button>
+    <ion-fab-list side="top" *ngIf="accountIds.length == 0">
+      <ion-fab-button color="primary" class="account" (click)="hashPackConnect()">
+        <ion-icon name="log-in-outline" class="fab_icon"></ion-icon>
+        <ion-text>Hashpack</ion-text>
+      </ion-fab-button>
+      <ion-fab-button color="primary" class="account" (click)="showQRCode()">
+        <ion-icon name="qr-code-outline" class="fab_icon"></ion-icon>
+        <ion-text>QR Code</ion-text>
+      </ion-fab-button>
+    </ion-fab-list>
+    <ion-fab-list side="top" *ngIf="accountIds.length > 0">
+      <ion-fab-button *ngFor="let pairedAccount of accountIds" color="primary" class="account">
+        {{pairedAccount}}
+      </ion-fab-button>
+      <ion-fab-button color="primary" class="account" (click)="hashPackDisconnect()">
+        <ion-icon name="log-out-outline" class="fab_icon"></ion-icon>
+        <ion-text>LOGOUT</ion-text>
+      </ion-fab-button>
+    </ion-fab-list>
+  </ion-fab>
+</ion-app>

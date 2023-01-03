@@ -1,0 +1,15 @@
+.qrcode {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;  /* Centering y-axis */
+  align-items :center; /* Centering x-axis */
+}
+
+ion-item {
+  --border-color: var(--ion-color-primary);
+  --border-color: red;
+  --border-width: 2px;
+  --border-radius: 25px;
+  padding: 5px;
+  margin: 5px;
+}

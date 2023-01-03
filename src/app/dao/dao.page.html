@@ -1,0 +1,84 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button id="show-node-details-dao">
+        <ion-icon slot="icon-only" ios="pulse" md="pulse"></ion-icon>
+      </ion-button>
+    </ion-buttons>   
+    <ion-title>DAO</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-popover trigger="show-node-details-dao" triggerAction="click">
+  <ng-template>
+    <ion-content [innerHTML]="getNodeDetails()" class="ion-padding">
+    </ion-content>
+  </ng-template>
+</ion-popover>
+
+<ion-content class="ion-align-items-center ion-text-center" color="tertiary">
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <ion-searchbar color="secondary" debounce="500" placeholder="Search DAO" (ionChange)="filterDaos($event)">
+        </ion-searchbar>
+        <ion-button size="small" color="primary" title="Create DAO" (click)="openCreateDaoModal()">
+          Create DAO
+        </ion-button>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="6" class="divisor">
+        <ion-text> Discover {{daos.length}} DAOs </ion-text>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <ion-grid *ngIf="filteredDaos.length > 0">
+    <ion-row>
+      <ion-col size-md="4" size-sm="6" size-xs="12" *ngFor="let dao of filteredDaos">
+        <ion-card  color="light" class="cards_DAO ion-text-center">
+          <ion-card-header>
+            <div class="flex">
+              <ion-avatar class="avatar"><img [src]="generateImageUrl(dao.image)" alt="img"/></ion-avatar>
+            </div>
+            <ion-card-title class="title">{{dao.name}}</ion-card-title>
+            <ion-card-subtitle class="subtitle">{{dao.description}}</ion-card-subtitle>
+          </ion-card-header>
+
+          <ion-card-content>
+            <ion-button [routerLink]="['project', dao.tokenId]" expand="block">See More</ion-button>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <ion-grid *ngIf="filteredDaos.length == 0">
+    <ion-row>
+      <ion-col size-md="4" size-sm="6" size-xs="12" *ngFor="let dao of place_holders">
+        <ion-card  color="light" class="cards_DAO ion-text-center">
+          <ion-card-header>
+            <div class="flex">
+              <ion-avatar class="avatar">
+                <ion-skeleton-text animated></ion-skeleton-text>
+              </ion-avatar>
+            </div>
+            <ion-card-title class="title">
+              <ion-skeleton-text animated style="width: 30%"></ion-skeleton-text>
+            </ion-card-title>
+            <ion-card-subtitle class="subtitle">
+              <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+            </ion-card-subtitle>
+          </ion-card-header>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+</ion-content>
+
+<ion-footer collapse="fade" translucent="true" class="ion-text-center"></ion-footer>
