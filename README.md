@@ -33,9 +33,9 @@ firebase login
 ```bash
 firebase init
 ```
-and configure it as follows<br />
+and configure it as follows:<br />
 <b>"Which Firebase CLI features do you want to set up for this folder?"</b><br />
-Choose "Configure files for Firebase Hosting and (optionally) set up GitHub Action deploys"<br /><br />
+Choose "Configure files for Firebase Hosting and (optionally) set up GitHub Action deploys"<br />
 <b>"What do you want to use as your public directory?"</b><br />Enter "www".<br />
 <b>"Set up automatic builds and deploys with GitHub?"</b><br />Enter the option you prefer.<br />
 <b>"Configure as a single-page app (rewrite all urls to /index.html)?"</b><br />Enter "Yes".<br />
