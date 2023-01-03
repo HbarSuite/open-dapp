@@ -34,16 +34,17 @@ firebase login
 firebase init
 ```
 and configure it as follows<br />
-"Which Firebase CLI features do you want to set up for this folder?" Choose "Configure files for Firebase Hosting and (optionally) set up GitHub Action deploys"<br />
-"What do you want to use as your public directory?" Enter "www".<br />
-"Set up automatic builds and deploys with GitHub?" Enter the option you prefer.<br />
-"Configure as a single-page app (rewrite all urls to /index.html)?" Enter "Yes".<br />
-"File www/index.html already exists. Overwrite?" Enter "No".<br />
+<b>"Which Firebase CLI features do you want to set up for this folder?"</b><br />
+Choose "Configure files for Firebase Hosting and (optionally) set up GitHub Action deploys"<br /><br />
+<b>"What do you want to use as your public directory?"</b><br />Enter "www".<br />
+<b>"Set up automatic builds and deploys with GitHub?"</b><br />Enter the option you prefer.<br />
+<b>"Configure as a single-page app (rewrite all urls to /index.html)?"</b><br />Enter "Yes".<br />
+<b>"File www/index.html already exists. Overwrite?"</b><br />Enter "No".<br />
 5 - send us an [Email](mailto:info@hbarsuite.network) with your project and domain, because you won't be allowed to interact with the smart-nodes unless you're whitelsted first.<br />
 
 ## Customizations and Restrictions
-Please feel free to change the UI/CSS as you wish, to fully match your brand and colors.
-There is no limitations on the use of the existing smart-node api, which you can find here:
+Please feel free to change the UI/CSS as you wish, to fully match your brand and colors.<br />
+There is no limitations on the use of the existing smart-node api, which you can find here:<br />
 TESTNET<br />
 [Smart-Node-1](testnet-sn1.hbarsuite.network/api)<br />
 [Smart-Node-2](testnet-sn2.hbarsuite.network/api)<br />
