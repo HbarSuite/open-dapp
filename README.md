@@ -2,7 +2,7 @@
 This repository has been created as a starting point for all of those who are willing to integrate HbarSuite infrastructure and services.
 Our wish is to facilitate developers and entrepreneurs in their web3 journey, and to provide a bootstrap tool for their own DAPPs.
 
-Up to date the only available library is done in IonicFramework + Angular, but we hope more developers will soon contribute to implement our technology in many different languages. If you are a developer and you will to help us out, please write us on [Discord](https://discord.gg/bHtu9AduNH) or send us an [Email](mailto:info@hbarsuite.network), there is an HSUITE reward waiting for good-skilled developers!!
+Up to date the only available library is done in IonicFramework + Angular, but we hope more developers will soon contribute to implement our technology in many different languages. If you are a developer and you're willing to help us out, please write us on [Discord](https://discord.gg/bHtu9AduNH) or send us an [Email](mailto:info@hbarsuite.network), there is an HSUITE reward waiting for good-skilled developers!!
 
 ## Installation
 simply do a checkout of this repository, then run:
