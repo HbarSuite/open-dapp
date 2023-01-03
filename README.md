@@ -30,7 +30,7 @@ If you wish to deploy your own DAPP, we strongly recommend you to use Firebase H
 This app is prepared to be a PWA (Progressive Web App), which means you can also add the icon to the home screen of mobile phones easily.
 In order to deploy it and use it, there are few steps needed:
 
-1 - go to [Firebase](https://console.firebase.google.com/u/0/) and create an application 
+1 - go to [Firebase](https://console.firebase.google.com/u/0/) and create an application<br />
 2 - install the firebase tools in your local environment
 ```bash
 npm install -g firebase-tools
@@ -49,8 +49,8 @@ Choose "Configure files for Firebase Hosting and (optionally) set up GitHub Acti
 <b>"What do you want to use as your public directory?"</b><br />Enter "www".<br />
 <b>"Set up automatic builds and deploys with GitHub?"</b><br />Enter the option you prefer.<br />
 <b>"Configure as a single-page app (rewrite all urls to /index.html)?"</b><br />Enter "Yes".<br />
-<b>"File www/index.html already exists. Overwrite?"</b><br />Enter "No".<br />
-5 - send us an [Email](mailto:info@hbarsuite.network) with your project and domain, because you won't be allowed to interact with the smart-nodes unless you're whitelsted first.<br />
+<b>"File www/index.html already exists. Overwrite?"</b><br />Enter "No".<br /><br />
+5 - send us an [Email](mailto:info@hbarsuite.network) with your project and domain, because you won't be allowed to interact with the smart-nodes unless you're whitelsted first.<br /><br />
 6 - you're now ready to deploy, the command is:
 ```bash
 firebase use YOUR_APP_NAME_HERE && ionic build --prod && firebase deploy

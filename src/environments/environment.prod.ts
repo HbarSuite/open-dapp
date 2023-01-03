@@ -10,5 +10,5 @@ export const environment = {
   // mirror_node: 'https://mainnet-public.mirrornode.hedera.com/api/v1/',
 
   launchpads: ['0.0.34332104'],
-  daos: ['0.0.34332104'],
+  daos: ['0.0.34332104', '0.0.34332089'],
 };
