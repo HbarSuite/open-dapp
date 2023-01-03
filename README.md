@@ -15,6 +15,16 @@ In order to run the application locally, enter the command:
 ```bash
 ionic serve
 ```
+
+## Configurations
+inside the environments files located at
+```bash
+dapp/src/environments/environment.ts
+dapp/src/environments/environment.prod.ts
+```
+you can list the tokens you wish to use in the launchpad and dao sections.
+This will facilitate you in filtering out all the tokens/daos which are not related to your own project.
+
 ## Deploying the app
 If you wish to deploy your own DAPP, we strongly recommend you to use Firebase Hosting.
 This app is prepared to be a PWA (Progressive Web App), which means you can also add the icon to the home screen of mobile phones easily.
@@ -41,6 +51,10 @@ Choose "Configure files for Firebase Hosting and (optionally) set up GitHub Acti
 <b>"Configure as a single-page app (rewrite all urls to /index.html)?"</b><br />Enter "Yes".<br />
 <b>"File www/index.html already exists. Overwrite?"</b><br />Enter "No".<br />
 5 - send us an [Email](mailto:info@hbarsuite.network) with your project and domain, because you won't be allowed to interact with the smart-nodes unless you're whitelsted first.<br />
+6 - you're now ready to deploy, the command is:
+```bash
+firebase use YOUR_APP_NAME_HERE && ionic build --prod && firebase deploy
+```
 
 ## Customizations and Restrictions
 Please feel free to change the UI/CSS as you wish, to fully match your brand and colors.<br />
