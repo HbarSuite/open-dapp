@@ -14,7 +14,7 @@ import { Clipboard } from '@capacitor/clipboard';
 })
 export class CreateDaoPage implements OnInit, OnDestroy {
   @ViewChild('slides', { static: false }) slides: IonSlides;
-  
+
   private loading: HTMLIonLoadingElement;
   private eventsSubscription: Subscription;
   private daos: Array<any> = new Array<any>();
@@ -81,20 +81,19 @@ export class CreateDaoPage implements OnInit, OnDestroy {
     });
 
     this.eventsSubscription = this.smartNodeSdkService.getEventsObserver().subscribe(async(event) => {
-      console.log(event);
       if(event.method == 'error' || event.event == 'transaction.offline.error') {
         this.loading.dismiss();
       }
 
-      if(event.method == 'events' && 
-      event.payload.action == 'dao.entity.create' && 
+      if(event.method == 'events' &&
+      event.payload.action == 'dao.entity.create' &&
       event.event == 'transaction.offline.signed') {
         this.loading.dismiss();
         this.slides.lockSwipeToNext(false);
         this.slides.slideNext();
         this.slides.lockSwipeToNext(true);
       }
-    }); 
+    });
   }
 
   closeModal() {
@@ -110,11 +109,11 @@ export class CreateDaoPage implements OnInit, OnDestroy {
       await Clipboard.write({
         string: `${window.location.origin}/dao/project/${this.dao.tokenId}`
       });
-  
-      await this.notificationsService.showNotification('Copied to Clipboard!', 'primary'); 
+
+      await this.notificationsService.showNotification('Copied to Clipboard!', 'primary');
     } catch(error) {
-      await this.notificationsService.showNotification(error.message); 
-    }    
+      await this.notificationsService.showNotification(error.message);
+    }
   }
 
   generateImageUrl() {
@@ -141,13 +140,14 @@ export class CreateDaoPage implements OnInit, OnDestroy {
 
       } else {
         const alert = await this.alertController.create({
+          mode: 'ios',
           header: this.tokenInfos.name,
           subHeader: this.tokenInfos.token_id,
           message: `Sorry, a description is required.`,
           buttons: ['OK'],
         });
-    
-        await alert.present();        
+
+        await alert.present();
       }
     } catch(error) {
       this.notificationsService.showNotification(error.message);
@@ -172,13 +172,14 @@ export class CreateDaoPage implements OnInit, OnDestroy {
         this.slides.lockSwipeToNext(true);
       } else {
         const alert = await this.alertController.create({
+          mode: 'ios',
           header: this.tokenInfos.name,
           subHeader: this.tokenInfos.token_id,
           message: `Sorry, the tokenID must be an NFT one.`,
           buttons: ['OK'],
         });
-    
-        await alert.present();        
+
+        await alert.present();
       }
     } catch(error) {
       loading.dismiss()
@@ -230,41 +231,43 @@ export class CreateDaoPage implements OnInit, OnDestroy {
         let exists = this.daos.find(dao => dao.tokenId == this.dao.tokenId);
         if(exists) {
           const alert = await this.alertController.create({
+            mode: 'ios',
             header: exists.name,
             subHeader: exists.tokenId,
             message: `Sorry, this DAO exists already.`,
             buttons: ['OK'],
           });
-      
+
           await alert.present();
         } else {
           const loading = await this.loadingController.create({
             message: `checking your token's informations...`
           });
-      
+
           loading.present();
-      
+
           try {
             let tokenInfos = await this.daoService.getTokenInfos(this.dao.tokenId);
             this.tokenInfos = tokenInfos.data;
             loading.dismiss();
-    
+
             if(this.tokenInfos.treasury_account_id !== this.wallet) {
               const alert = await this.alertController.create({
+                mode: 'ios',
                 header: this.tokenInfos.name,
                 subHeader: this.tokenInfos.token_id,
-                message: `Sorry, you must be logged in 
-                  with your token's treasury <b>${this.tokenInfos.treasury_account_id}</b> 
+                message: `Sorry, you must be logged in
+                  with your token's treasury <b>${this.tokenInfos.treasury_account_id}</b>
                   in order to proof the ownership of <b>${this.tokenInfos.name}</b>`,
                 buttons: ['OK'],
               });
-          
+
               await alert.present();
             } else {
               this.slides.lockSwipeToNext(false);
               this.slides.slideNext();
               this.slides.lockSwipeToNext(true);
-            }            
+            }
           } catch(error) {
             loading.dismiss();
             this.notificationsService.showNotification(`Something went wrong, please be sure the tokenID is correct.`);
@@ -272,13 +275,14 @@ export class CreateDaoPage implements OnInit, OnDestroy {
         }
       } else {
         const alert = await this.alertController.create({
+          mode: 'ios',
           header: `Create DAO`,
           subHeader: `missing inputs`,
           message: `Sorry, you need to introduce a tokenID and a image in order to proceed.`,
           buttons: ['OK'],
         });
-    
-        await alert.present();        
+
+        await alert.present();
       }
     } catch(error) {
       this.notificationsService.showNotification(error.message);
@@ -287,6 +291,7 @@ export class CreateDaoPage implements OnInit, OnDestroy {
 
   async openHelpAlert() {
     const alert = await this.alertController.create({
+      mode: 'ios',
       header: `DAO Type`,
       subHeader: `Classic OR Limited?`,
       message: `
@@ -303,7 +308,7 @@ export class CreateDaoPage implements OnInit, OnDestroy {
       buttons: ['OK'],
     });
 
-    await alert.present(); 
+    await alert.present();
   }
 
 }

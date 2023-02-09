@@ -93,7 +93,6 @@ export class DaoService extends SmartService {
       });
 
       return () => {
-        console.log("unsubscribed observer, going to unsubscribe smart-node-socket as well");
         subscription.unsubscribe();
       };
     });
@@ -155,6 +154,54 @@ export class DaoService extends SmartService {
         reject(error);
       }
     });
+  }
+
+  async retryVoteProposal(
+    actionId: string
+  ): Promise<any> {
+    return new Promise(async(resolve, reject) => {
+      try {
+        let responseData = await this.smartNodeSdkService.voteProposalRetry(
+          actionId
+        );
+
+        resolve(responseData);
+      } catch(error) {
+        reject(error);
+      }
+    })
+  }
+
+  async createProposalRetry(
+    actionId: string
+  ): Promise<any> {
+    return new Promise(async(resolve, reject) => {
+      try {
+        let responseData = await this.smartNodeSdkService.createProposalRetry(
+          actionId
+        );
+
+        resolve(responseData);
+      } catch(error) {
+        reject(error);
+      }
+    })
+  }
+
+  async createDaoRetry(
+    actionId: string
+  ): Promise<any> {
+    return new Promise(async(resolve, reject) => {
+      try {
+        let responseData = await this.smartNodeSdkService.createDaoRetry(
+          actionId
+        );
+
+        resolve(responseData);
+      } catch(error) {
+        reject(error);
+      }
+    })
   }
 
   async createDaoTransaction(

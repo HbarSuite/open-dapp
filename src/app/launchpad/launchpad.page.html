@@ -4,20 +4,11 @@
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
     <ion-buttons slot="end">
-      <ion-button id="show-node-details-launchpad">
-        <ion-icon slot="icon-only" ios="pulse" md="pulse"></ion-icon>
-      </ion-button>
+      <hsuite-node-details></hsuite-node-details>
     </ion-buttons>
     <ion-title>Launchpad</ion-title>
   </ion-toolbar>
 </ion-header>
-
-<ion-popover trigger="show-node-details-launchpad" triggerAction="click">
-  <ng-template>
-    <ion-content [innerHTML]="getNodeDetails()" class="ion-padding">
-    </ion-content>
-  </ng-template>
-</ion-popover>
 
 <ion-toolbar color="tertiary">
   <ion-searchbar #searchBar showClearButton="focus"
@@ -37,7 +28,6 @@
 </ion-toolbar>
 
 <ion-content color="tertiary">
-
   <div *ngIf="tokens.length == 0 && place_holders.length > 0">
     <ion-grid>
       <ion-row *ngFor="let place_holder of place_holders" color="secondary">
@@ -147,7 +137,7 @@
 
             <ion-card-content>
               <ion-thumbnail slot="start">
-                <img [src]="token.image" class="avatar" />
+                <ion-img [src]="token.image" class="avatar"></ion-img>
               </ion-thumbnail>
 
               <div class="token_details">
@@ -164,13 +154,12 @@
                   <ion-label color="primary">Available: {{token.launchpad.formattedAvailable.toString()}}</ion-label>
                 </ion-chip>
                 <ion-chip color="light" *ngIf="token.launchpad.calculatedFees">
-                  Hsuite Fees: {{token.launchpad.calculatedFees}}
+                  Fees: {{token.launchpad.calculatedFees}}
                 </ion-chip>
 
-
-                <ion-chip *ngIf="token.launchpad.is_frozen">
+                <!-- <ion-chip *ngIf="token.launchpad.is_frozen">
                   <ion-label color="warning">Frozen until live</ion-label>
-                </ion-chip>
+                </ion-chip> -->
               </div>
 
               <ion-progress-bar [value]="token.launchpad.percentage / 100"></ion-progress-bar>

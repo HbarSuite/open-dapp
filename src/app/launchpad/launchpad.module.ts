@@ -7,13 +7,15 @@ import { IonicModule } from '@ionic/angular';
 import { LaunchpadPageRoutingModule } from './launchpad-routing.module';
 
 import { LaunchpadPage } from './launchpad.page';
+import { ComponentsModule } from '../components/components.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    LaunchpadPageRoutingModule
+    LaunchpadPageRoutingModule,
+    ComponentsModule
   ],
   declarations: [LaunchpadPage]
 })

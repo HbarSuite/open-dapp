@@ -1,7 +1,7 @@
-import { FormatsHelper } from './formats';
+import { Formats } from './formats';
 
-describe('FormatsHelper', () => {
+describe('Formats', () => {
   it('should create an instance', () => {
-    expect(new FormatsHelper()).toBeTruthy();
+    expect(new Formats()).toBeTruthy();
   });
 });

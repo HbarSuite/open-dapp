@@ -2,6 +2,7 @@
   width: 80px;
   height:80px;
   margin: auto;
+  // margin-right: 15px;
   margin-bottom: 5px;
   border-radius: 50%;
   box-shadow: 0px 0px 10px #9a0dff;
@@ -10,8 +11,10 @@
 .committee-avatar {
   margin: 5px;
   margin-right: 5px;
+
   width: 30px;
   height:30px;
+
   border-radius: 50%;
   box-shadow: 0px 0px 5px #9a0dff;;
 }
@@ -47,6 +50,7 @@
 }
 
 .cards_DAO:hover{
+  // cursor: pointer;
   border-color: #b9b5c2;
 }
 
@@ -184,6 +188,8 @@ ion-progress-bar {
   cursor: pointer;
   --border-color: #8e67e9;
   --box-shadow: 0px 0px 5px #b65ef5;
+  // --background:#7a43fa;
+  // color: white;
 }
 
 .vote-btn-submit{

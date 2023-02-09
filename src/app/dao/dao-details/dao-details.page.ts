@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { IonSlides, LoadingController } from '@ionic/angular';
+import { IonContent, IonSlides, LoadingController } from '@ionic/angular';
 import { SmartNodeSdkService } from '@hsuite/angular-sdk';
 import { DaoService } from 'src/app/services/dao/dao.service';
 import { NotificationsService } from 'src/app/services/notifications/notifications.service';
@@ -21,9 +21,11 @@ export class DaoDetailsPage implements OnInit, OnDestroy {
   proposal_type = 'public';
   publicProposals: Array<any> = new Array();
   filteredPublicProposals: Array<any> = new Array();
+  wallet: string = null;
 
   councilProposals: Array<any> = new Array();
   filteredCouncilProposals: Array<any> = new Array();
+  pendingProposals: Array<any> = new Array();
   
   focused: boolean;
   isModalOpen = false;
@@ -33,6 +35,8 @@ export class DaoDetailsPage implements OnInit, OnDestroy {
   endShowPicker = false;
   private loading: HTMLIonLoadingElement;
   private eventsSubscription: Subscription;
+  private pendingProposal: any = null;
+  @ViewChild(IonContent) content: IonContent;
 
   constructor(
     private route: ActivatedRoute,
@@ -81,20 +85,18 @@ export class DaoDetailsPage implements OnInit, OnDestroy {
 
         this.loading.present();
 
-        let hashConnectData = await this.daoService.loadHashconnectData();
-        let wallet = lodash.first(hashConnectData.accountIds);
-        let proposal = Object.assign({}, this.newProposal);
+        this.pendingProposal = Object.assign({}, this.newProposal);
 
-        proposal.options = this.newProposal.options.map(option => option.name)
+        this.pendingProposal.options = this.newProposal.options.map(option => option.name)
           .filter(option => option != '');
-        proposal.start_date = this.newProposal.start_date.valueOf().toString();
-        proposal.end_date = this.newProposal.end_date.valueOf().toString();
+          this.pendingProposal.start_date = this.newProposal.start_date.valueOf().toString();
+          this.pendingProposal.end_date = this.newProposal.end_date.valueOf().toString();
   
         let fees = await this.daoService.getFees("proposals");
         let responseData = await this.daoService.proposalTransaction(
           this.dao.tokenId,
-          proposal,
-          wallet,
+          this.pendingProposal,
+          this.wallet,
           fees
         );
 
@@ -151,10 +153,10 @@ export class DaoDetailsPage implements OnInit, OnDestroy {
         this.councilProposals = proposals.filter(proposal => proposal.type == 'private');
         this.filteredCouncilProposals = this.councilProposals;
 
+        this.pendingProposals = proposals.filter(proposal => proposal.owner && proposal.status);
         this.isLoading = false;
         resolve(true);
       } catch(error) {
-        console.log(error);
         reject(error);
       }     
     })
@@ -172,6 +174,14 @@ export class DaoDetailsPage implements OnInit, OnDestroy {
   ngOnInit() {
     let daoTokenId = this.route.snapshot.paramMap.get('dao');
 
+    this.daoService.loadHashconnectData().then(hashConnectData => {
+      this.wallet = lodash.first(hashConnectData.accountIds);
+    });
+
+    this.smartNodeSdkService.getHashPackService().observeHashpackConnection.subscribe(async(hashConnectData) => {
+      this.wallet = lodash.first(hashConnectData.accountIds);
+    });
+    
     this.daoService.getDao(daoTokenId).then(async(dao) => {
       this.dao = this.mapWrongDAO(dao);
       await this.initProposals(false);
@@ -185,16 +195,36 @@ export class DaoDetailsPage implements OnInit, OnDestroy {
       }
 
       if(event.method == 'events' && 
-      event.payload.action == 'dao.proposal.create' && 
-      event.event == 'transaction.offline.signed') {
+      event.payload.action == 'dao.proposal.create') {
         if(this.loading) {
           this.loading.dismiss();
         }
-        
-        this.segment = 'proposals';
-        this.cleanProposals();
-        this.cleanProposalForm();
-        await this.initProposals(true);
+
+        switch(event.event) {
+          case 'dao.proposal.create.pending':
+            this.pendingProposal.status = 'pending';
+            this.pendingProposals.push(event.payload.proposal);
+  
+            this.segment = 'proposals';
+            this.cleanProposalForm();
+
+            await this.content.scrollToTop(2500);
+            break;            
+          case 'dao.proposal.create.error':
+            this.cleanProposals();
+            this.cleanProposalForm();
+            await this.initProposals(true);
+            break;
+          case 'dao.proposal.create.success':
+            let completedProposalIndex = this.pendingProposals.findIndex(proposal => proposal.id == event.payload.proposal.id);
+            this.pendingProposals.splice(completedProposalIndex, 1);
+
+            this.segment = 'proposals';
+            this.cleanProposals();
+            this.cleanProposalForm();
+            await this.initProposals(true);
+            break;
+        }
       }
     }); 
   }
@@ -226,6 +256,15 @@ export class DaoDetailsPage implements OnInit, OnDestroy {
     }
 
     return color;
+  }
+
+  async retryCreateProposal(proposal) {
+    try {
+      proposal.status = 'pending';
+      await this.daoService.createProposalRetry(proposal.id);
+    } catch (error) {
+      this.notificationsService.showNotification(error.message);
+    }
   }
 
   filterPrivateProposals(event) {

@@ -45,7 +45,7 @@ export class ProposalsPage implements OnInit, OnDestroy {
   public show = false;
   public showVotes = false;
   public selectedOption: {
-    index: number, 
+    index: number,
     value: string
   } = {
     index: null,
@@ -82,13 +82,13 @@ export class ProposalsPage implements OnInit, OnDestroy {
         this.proposal.content = this.linkify(this.proposal.content);
         this.proposal.content = this.proposal.content.replaceAll(/(?<!\b(?:https?:\/\/|www)\S*)\. /g,'.<br/><br/>');
 
-        if((this.proposal.type == 'public' && this.proposal.status == 'active') 
+        if((this.proposal.type == 'public' && this.proposal.status == 'active')
           || (this.proposal.type == 'private' && this.proposal.status == 'pending')
         ) {
           this.showVotes = true;
 
           this.votesSubscription = this.daoService.getVotes(this.proposal.votes).subscribe(votes => {
-            this.votes = votes;
+            this._formatVotes(votes);
           });
                 
           this.snapshot = await this.daoService.validateSnapshot(this.wallet, this.daoTokenId, this.daoProposal, this.proposalType);
@@ -101,6 +101,55 @@ export class ProposalsPage implements OnInit, OnDestroy {
         reject(error);
       }
     })
+  }
+
+  getVoteLabel(): string {
+    if(this.snapshot == null) {
+      return 'loading snapshot...';
+    } else {
+      if(this.hasVoted()) {
+        let vote = this.votes.find(x => x.wallet == this.wallet);
+        if(!vote.status) {
+          return 'You voted already';
+        } else {
+          switch(vote.status) {
+            case 'pending':
+              return 'Sending vote, please wait...';
+              break;
+            case 'error':
+              return 'Try Again';
+              break;
+          }
+        }
+      } else {
+        if(this.isVoting) {
+          return 'Voting, please wait...';
+        } else {
+          return 'Vote';
+        }
+      }
+    }
+  }
+
+  private _formatVotes(votes: Array<any>): Array<any> {
+    let totalWeight = votes.reduce(
+      (accumulator, currentValue) => accumulator += Number(currentValue?.weight),
+      0
+    );
+
+    this.votes = votes.map(vote => {
+      return {
+        ...vote,
+        percentage: ((vote?.weight / totalWeight) * 100).toFixed(2)
+      }
+    });
+
+    let totalPercentage = this.votes.reduce(
+      (accumulator, currentValue) => accumulator += Number(currentValue.percentage),
+      0
+    );
+
+    return this.votes;
   }
 
   private mapWrongDAO(dao: any): Array<any> {
@@ -134,43 +183,64 @@ export class ProposalsPage implements OnInit, OnDestroy {
               this.isLoggedIn = false;
             }
           });
-          
+
           this.eventsSubscription = this.smartNodeSdkService.getEventsObserver().subscribe(async(event) => {
             if(event.method == 'error' || event.event == 'transaction.offline.error') {
               this.isVoting = false;
             }
 
-            if(event.method == 'events' && 
-            event.payload.action == 'dao.proposal.vote' && 
-            event.event == 'transaction.offline.signed') {
-              await this.updateAfterVote(event.payload.proposal);
+            if(event.method == 'events' &&
+            event.payload.action == 'dao.vote.create') {
+              switch(event.event) {
+                case 'dao.vote.create.pending':
+                  // await this.updateAfterVote();
+                  break;            
+                case 'dao.vote.create.error':
+                  await this.updateAfterVote();
+                  break;
+                case 'dao.vote.create.success':
+                  let proposal = await this.daoService.getProposal(this.daoTokenId, this.daoProposal, this.proposalType);
+                  this.proposal.latestStatistics = proposal.latestStatistics;
+                  await this.updateAfterVote();
+                  this.isVoting = false;
+                  break;
+              }              
             }
-      
+
             if(event.method == 'authenticate') {
               this.isLoggedIn = true;
               await this._init();
             }
-          });          
+          });
         }
       } catch(error) {
         this.notificationsService.showNotification(error.message);
-      }    
+      }
     }).catch(error => {
       this.notificationsService.showNotification(error.message);
     });
   }
 
-  async updateAfterVote(proposal: any) {
+  async updateAfterVote() {
     try {
-      this.proposal = proposal;
-      this.votes = new Array<any>();
+      // this.votes = new Array<any>();
 
       this.votesSubscription = this.daoService.getVotes(this.proposal.votes).subscribe(votes => {
-        this.votes = votes;
+        this._formatVotes(votes);
       });
 
-      this.isVoting = false;
+      // this.isVoting = false;
     } catch(error) {
+      this.notificationsService.showNotification(error.message);
+    }
+  }
+
+  async retryVoteProposal() {
+    try {
+      let vote = this.votes.find(x => x.wallet == this.wallet);
+      vote.status = 'pending';
+      await this.daoService.retryVoteProposal(vote.id);
+    } catch (error) {
       this.notificationsService.showNotification(error.message);
     }
   }
@@ -218,10 +288,10 @@ export class ProposalsPage implements OnInit, OnDestroy {
         break;
       case 'closed':
         color = 'medium';
-        break;        
+        break;
       case 'pending':
         color = 'danger';
-        break;        
+        break;
     }
 
     return color;
@@ -229,6 +299,7 @@ export class ProposalsPage implements OnInit, OnDestroy {
 
   async presentAlert(header: string, subHeader: string, message: string) {
     const alert = await this.alertController.create({
+      mode: 'ios',
       header: header,
       subHeader: subHeader,
       message: message,
@@ -247,11 +318,19 @@ export class ProposalsPage implements OnInit, OnDestroy {
         if(start.isAfter()) {
           await this.presentAlert('Wait...', 'this proposal is still in pending', `it will start in ${start.fromNow()}`);
         } else {
+          // let voter = null;
+
+          // if(this.proposal.type == 'private' || this.dao.type == 'NON_FUNGIBLE_UNIQUE') {
+          //   voter = this.snapshot.find(snapshot => snapshot.account_id == this.wallet);
+          // } else {
+          //   voter = this.snapshot.find(snapshot => snapshot.account == this.wallet);
+          // }
+
           if(this.snapshot) {
             const loading = await this.loadingController.create({
               message: 'Sending your vote...'
             });
-    
+
             loading.present();
             this.isVoting = true;
     
@@ -283,7 +362,7 @@ export class ProposalsPage implements OnInit, OnDestroy {
               await this.presentAlert('Ops...', `You are not an ${this.dao.name} holder`, `You need to hold some ${this.dao.name} token to have the rights to vote.`);
             }
           }
-        }         
+        }
       }
     } catch(error) {
       this.notificationsService.showNotification(error.message);

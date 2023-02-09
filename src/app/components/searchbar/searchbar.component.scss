@@ -1,0 +1,22 @@
+.search{
+  margin: auto;
+  margin-right: 10px;
+}
+ion-searchbar{
+  --background: #451ba8 !important;
+  --placeholder-color:white;
+  --placeholder-opacity:.8;
+  --placeholder-font-size:10px;
+  --icon-color:white;
+  --color:white;
+  --box-shadow: none;
+}
+
+.search ion-button{
+  --background: transparent;
+  --box-shadow: none;
+}
+
+path ionicon-fill-none {
+  color: white;
+}

@@ -7,14 +7,18 @@ import { IonicModule } from '@ionic/angular';
 import { DaoPageRoutingModule } from './dao-routing.module';
 
 import { DaoPage } from './dao.page';
+import { ComponentsModule } from '../components/components.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    DaoPageRoutingModule
+    DaoPageRoutingModule,
+    ComponentsModule
   ],
-  declarations: [DaoPage]
+  declarations: [
+    DaoPage
+  ]
 })
 export class DaoPageModule {}

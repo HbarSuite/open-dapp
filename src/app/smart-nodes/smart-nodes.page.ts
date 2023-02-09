@@ -20,10 +20,4 @@ export class SmartNodesPage implements OnInit {
     this.nodesOnline = this.smartNodeSdkService.getSocketsService().getNodesOnline();
   }
 
-  getNodeDetails() {
-    let node = this.smartNodeSdkService.getNetworkService().getCurrentNode();
-    let details = `Connected to <a href="${node.url}/api" target="_blank"><b>${node.operator}</b></a>`;
-    return details;
-  }
-
 }

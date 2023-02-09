@@ -1,0 +1,22 @@
+<div [ngClass]="{'home-head': BgImage !== '', 'home-head-no-bg': BgImage === ''}" [ngStyle]="(BgImage !== '') && {'background-image': 'url(' + BgImage + ')'}">
+
+  <ion-img  *ngIf="Logo !== '' " style="width: 200px;margin:auto;" [src]="Logo" alt="hsuite_logo"></ion-img>
+
+  <ion-avatar *ngIf="Avatar !== '' " style="width: 120px; height: 120px ;margin: auto;">
+    <ion-img [src]="Avatar" alt="hsuite_logo"></ion-img>
+  </ion-avatar>
+
+  <ion-text color="light" *ngIf="Template == 1">
+    <h1 [ngStyle]="{'font-size': TitleFontSize}">{{Title}}</h1>
+    <p [ngStyle]="{'font-size': SubtitleFontSize}" *ngIf="Subtitle !== '' ">{{Subtitle}}</p>
+  </ion-text>
+
+  <ion-text color="light" *ngIf="Template == 0">
+    <ion-skeleton-text [animated]="true" style="width: 80%;margin:10px auto;"></ion-skeleton-text>
+    <ion-skeleton-text [animated]="true" style="width: 40%;margin:10px auto;"></ion-skeleton-text>
+  </ion-text>
+
+  <ng-content select="[button]"></ng-content>
+
+</div>
+

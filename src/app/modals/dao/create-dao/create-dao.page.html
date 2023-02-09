@@ -13,9 +13,9 @@
       <ion-grid>
         <ion-row>
           <ion-col size="10" class="center-column">
-            <div class="flex">
-              <img style="width: 30%; border-radius: 50%;" [src]="generateImageUrl()" alt="img"/>
-            </div>
+            <ion-avatar class="avatar">
+              <ion-img style="border-radius: 50%;" [src]="generateImageUrl()" alt="img"></ion-img>
+            </ion-avatar>
 
             <div class="top-space divisor">
               <ion-card-title color="light" class="title"> Create a DAO </ion-card-title>
@@ -28,7 +28,7 @@
             <form class="modalForm">
               <div class="top-space round-div">
                 <ion-item lines="none" color="secondary">
-                  <ion-label>Logo Url</ion-label>                    
+                  <ion-label>Logo Url</ion-label>
                 </ion-item>
 
                 <ion-item class="round-item">
@@ -39,13 +39,13 @@
               <div class="top-space round-div">
                 <ion-item lines="none" color="secondary">
                   <ion-label>Token ID</ion-label>
-                </ion-item>                
-                
+                </ion-item>
+
                 <ion-item class="round-item">
                   <ion-input name="tokenId" [(ngModel)]="dao.tokenId" required="true" placeholder="Token ID"></ion-input>
                 </ion-item>
               </div>
-    
+
               <div class="top-space round-div">
                 <ion-list>
                   <ion-item lines="none" color="secondary">
@@ -54,7 +54,7 @@
                     </ion-label>
                     <ion-badge slot="end" (click)="openHelpAlert()">
                       help
-                    </ion-badge>                    
+                    </ion-badge>
                   </ion-item>
 
                   <ion-item class="round-item" style="margin-bottom: 15px;">
@@ -66,9 +66,9 @@
                   </ion-item>
                 </ion-list>
               </div>
-    
+
               <div class="top-space divisor"></div>
-    
+
               <div class="top-space round-div">
                 <ion-button expand="block" (click)="validateDao()">Next</ion-button>
               </div>
@@ -83,7 +83,7 @@
         <ion-row>
           <ion-col size="10" class="center-column">
             <div class="flex">
-              <img style="width: 30%; border-radius: 50%;" [src]="generateImageUrl()" alt="img"/>
+              <ion-img style="width: 30%; border-radius: 50%;" [src]="generateImageUrl()" alt="img"></ion-img>
             </div>
 
             <div class="top-space divisor">
@@ -99,14 +99,14 @@
                 <ion-item lines="none" color="secondary">
                   <ion-label>About {{tokenInfos.name}}</ion-label>
                 </ion-item>
-                
+
                 <ion-item class="round-item">
                   <ion-textarea name="about" [(ngModel)]="dao.about" required="true" placeholder="Enter more information here..." max="1024"></ion-textarea>
                 </ion-item>
               </div>
-    
+
               <div class="top-space divisor"></div>
-    
+
               <div class="top-space round-div">
                 <ion-button expand="block" (click)="setupAbout()">Next</ion-button>
               </div>
@@ -122,7 +122,7 @@
         <ion-row>
           <ion-col size="10" class="center-column">
             <div class="flex">
-              <img style="width: 30%; border-radius: 50%;" [src]="generateImageUrl()" alt="img"/>
+              <ion-img style="width: 30%; border-radius: 50%;" [src]="generateImageUrl()" alt="img"></ion-img>
             </div>
 
             <div class="top-space divisor">
@@ -138,14 +138,14 @@
                 <ion-item lines="none" color="secondary">
                   <ion-label>Council's NFT ID</ion-label>
                 </ion-item>
-                
+
                 <ion-item class="round-item">
                   <ion-input name="councilNftId" [(ngModel)]="dao.limited.councilNftId" required="true" placeholder="NFT ID"></ion-input>
                 </ion-item>
               </div>
-    
+
               <div class="top-space divisor"></div>
-    
+
               <div class="top-space round-div">
                 <ion-button expand="block" (click)="setupCouncil()">Next</ion-button>
               </div>
@@ -160,9 +160,9 @@
         <ion-row>
           <ion-col size="10" class="center-column">
             <div class="flex">
-              <img style="width: 30%; border-radius: 50%;" [src]="generateImageUrl()" alt="img"/>
+              <ion-img style="width: 30%; border-radius: 50%;" [src]="generateImageUrl()" alt="img"></ion-img>
             </div>
-            
+
             <div class="top-space divisor">
               <ion-card-title color="light" class="title"> Token Details </ion-card-title>
               <ion-card-subtitle color="light" class="subtitle"> Please double check if all the information is correct.  </ion-card-subtitle>
@@ -174,7 +174,7 @@
             <ion-list *ngIf="tokenInfos">
               <ion-item color="secondary">
                 <ion-label><b>TokenID:</b> {{tokenInfos.token_id}}</ion-label>
-              </ion-item>              
+              </ion-item>
               <ion-item color="secondary">
                 <ion-label><b>Name:</b> {{tokenInfos.name}}</ion-label>
               </ion-item>
@@ -189,13 +189,13 @@
               </ion-item>
               <ion-item color="secondary">
                 <ion-label><b>DAO Model:</b> {{dao.model}}</ion-label>
-              </ion-item>    
+              </ion-item>
               <ion-item color="secondary" *ngIf="dao.model == 'limited' && councilInfos">
                 <ion-label><b>DAO Council:</b> {{councilInfos.name}} ({{councilInfos.token_id}})</ion-label>
-              </ion-item>      
+              </ion-item>
               <ion-item color="secondary">
                 <ion-label><b>About this DAO:</b> {{dao.about}}</ion-label>
-              </ion-item>                    
+              </ion-item>
             </ion-list>
 
             <div class="top-space round-div">
@@ -211,9 +211,9 @@
         <ion-row>
           <ion-col size="10" class="center-column">
             <div class="flex">
-              <img style="width: 30%; border-radius: 50%;" [src]="generateImageUrl()" alt="img"/>
+              <ion-img style="width: 30%; border-radius: 50%;" [src]="generateImageUrl()" alt="img"></ion-img>
             </div>
-            
+
             <div class="top-space divisor">
               <ion-card-title color="light" class="title"> Create DAO </ion-card-title>
               <ion-card-subtitle color="light" class="subtitle"> Are you ready to go? </ion-card-subtitle>
@@ -233,9 +233,9 @@
         <ion-row>
           <ion-col size="10" class="center-column">
             <div class="flex">
-              <img style="width: 30%; border-radius: 50%;" [src]="generateImageUrl()" alt="img"/>
+              <ion-img style="width: 30%; border-radius: 50%;" [src]="generateImageUrl()" alt="img"></ion-img>
             </div>
-            
+
             <div class="top-space divisor">
               <ion-card-title color="light" class="title">{{tokenInfos.name}}</ion-card-title>
               <ion-card-subtitle color="light" class="subtitle">{{tokenInfos.memo}}</ion-card-subtitle>

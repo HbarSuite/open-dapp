@@ -11,7 +11,11 @@ const routes: Routes = [
   {
     path: 'project/:dao',
     loadChildren: () => import('./dao-details/dao-details.module').then( m => m.DaoDetailsPageModule)
-  }
+  },
+  {
+    path: 'create-dao',
+    loadChildren: () => import('../modals/dao/create-dao/create-dao.module').then( m => m.CreateDaoPageModule)
+  },
 ];
 
 @NgModule({

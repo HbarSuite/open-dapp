@@ -18,18 +18,6 @@ const routes: Routes = [
   {
     path: 'smart-nodes',
     loadChildren: () => import('./smart-nodes/smart-nodes.module').then( m => m.SmartNodesPageModule)
-  },
-  {
-    path: 'pairing',
-    loadChildren: () => import('./modals/pairing/pairing.module').then( m => m.PairingPageModule)
-  },
-  {
-    path: 'buy-ico',
-    loadChildren: () => import('./modals/ico/buy-ico/buy-ico.module').then( m => m.BuyIcoPageModule)
-  },
-  {
-    path: 'create-dao',
-    loadChildren: () => import('./modals/dao/create-dao/create-dao.module').then( m => m.CreateDaoPageModule)
   }
 ];
 
