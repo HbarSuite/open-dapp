@@ -11,7 +11,6 @@ import { SmartNodeSdkService } from '@hsuite/angular-sdk';
 import { ActivatedRoute } from '@angular/router';
 import { Clipboard } from '@capacitor/clipboard';
 import { Transaction } from '@hashgraph/sdk';
-import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-launchpad',
@@ -47,7 +46,6 @@ export class LaunchpadPage implements OnInit, OnDestroy {
   }
 
   async showDetails(token) {
-    console.log(token);
     const alert = await this.alertController.create({
       header: token.name,
       subHeader: `$${token.symbol}`,
@@ -164,10 +162,8 @@ export class LaunchpadPage implements OnInit, OnDestroy {
   async loadLaunchpads() {
     try {
       this.tokens = await this.launchpadService.getList();
-      this.tokens = this.tokens.filter(token => environment.launchpads.includes(token.id));
-
       this.filteredTokens = this.tokens.map(token => {
-        token.launchpad.calculatedFees = this.calculateTokenFees(token);
+        token.launchpad.calculatedFees = this.calculateTokenFees(token).formatted;
         return token;
       });
 
@@ -178,29 +174,58 @@ export class LaunchpadPage implements OnInit, OnDestroy {
     }
   }
 
-  calculateTokenFees(token): string {
+  calculateTokenFees(token): {value: number, formatted: string} {
     try {
-      let calculatedFee: string = null;
+      let calculatedFee = {
+        value: 0,
+        formatted: ''
+      };
   
       switch(token.type) {
         case 'NON_FUNGIBLE_UNIQUE':
           if(token.launchpad.buy_with_token) {
-            calculatedFee = `${token.launchpad.fees.fixed.hsuite}`;
+            calculatedFee = {
+              value: token.launchpad.fees.fixed.hsuite,
+              formatted: `${token.launchpad.fees.fixed.hsuite}`
+            }
           } else {
-            calculatedFee = `${new Decimal(token.launchpad.price).div(this.hsuiteTokenInfos.price)
-              .times(token.launchpad.fees.percentage.hsuite).toString()}`;
+            if(token.launchpad.fees_in_hbar) {
+              calculatedFee = {
+                value: new Decimal(token.launchpad.price)
+                  .times(token.launchpad.fees.percentage.hbar).toNumber(),
+                formatted: `${new Decimal(token.launchpad.price)
+                  .times(token.launchpad.fees.percentage.hbar).toString()} ℏ`
+              }
+            } else {
+              calculatedFee = {
+                value: new Decimal(token.launchpad.price).div(this.hsuiteTokenInfos.price)
+                  .times(token.launchpad.fees.percentage.hsuite).toNumber(),
+                formatted: `${new Decimal(token.launchpad.price).div(this.hsuiteTokenInfos.price)
+                  .times(token.launchpad.fees.percentage.hsuite).toString()} HSUITE`
+              }
+            }
           }
           break;
         case 'FUNGIBLE_COMMON':
           if(token.launchpad.tokenId != this.hsuiteTokenInfos.id) {
-            calculatedFee = `${token.launchpad.fees.percentage.hsuite * 100}%`;
+            if(token.launchpad.fees_in_hbar) {
+              calculatedFee = {
+                value: token.launchpad.fees.percentage.hbar * 100,
+                formatted: `${token.launchpad.fees.percentage.hbar * 100}%  ℏ`
+              }
+            } else {
+              calculatedFee = {
+                value: token.launchpad.fees.percentage.hsuite * 100,
+                formatted: `${token.launchpad.fees.percentage.hsuite * 100}%`
+              }
+            }
           }
           break;
       }
   
       return calculatedFee;      
     } catch(error) {
-      console.log(error);
+      this.notificationsService.showNotification(error.message);
     }
   }
 
@@ -299,7 +324,7 @@ export class LaunchpadPage implements OnInit, OnDestroy {
                 hashpackResponse.error
               );
             } catch(error) {
-              console.error(error);
+              this.notificationsService.showNotification(error.message);
             }
             
           } catch(error) {
@@ -313,6 +338,31 @@ export class LaunchpadPage implements OnInit, OnDestroy {
     } catch(error) {
       await this.notificationsService.showNotification(error.message);
     }
+  }
+
+    async checkBalances(wallet: string, tokenToBuy: any): Promise<boolean> {
+    return new Promise(async (resolve, reject) => {
+      try {
+        let utilities = (await this.smartNodeSdkService.getRestService().getUtilities()).data;
+        let accountInfo = (await this.smartNodeSdkService.getRestService().getAccountBalance(wallet)).data;
+        let hsuiteFees = this.calculateTokenFees(tokenToBuy); 
+
+        if(tokenToBuy.id == utilities.hsuite.id) {
+          resolve(true);
+        } else {
+          let hsuiteInWallet = accountInfo.tokens.find(token => token.tokenId == utilities.hsuite.id);
+          hsuiteInWallet = hsuiteInWallet.balance / (10 ** utilities.hsuite.decimals);
+
+          if(hsuiteInWallet >= hsuiteFees.value) {
+            resolve(true);
+          } else {
+            reject(new Error(`Sorry, you must own enough HSUITE in order to pay fees.`));
+          }
+        }      
+      } catch(error) {
+        reject(error);
+      }
+    });
   }
 
   async BuyNow(token: any) {
@@ -347,6 +397,8 @@ export class LaunchpadPage implements OnInit, OnDestroy {
             missingTokens = [...new Set(missingTokens)];
 
             if(missingTokens.length == 0) {
+              // check for hsuite balance before allowing to buy...
+              await this.checkBalances(localData.accountIds[0], token);
               await this.openBuyModal(token, localData.accountIds[0]);
             } else {
               loading.message = "Please approve token association from your wallet...";
@@ -361,7 +413,6 @@ export class LaunchpadPage implements OnInit, OnDestroy {
             loading.dismiss();
           }).catch(async(error) => {
             loading.dismiss();
-            console.error(error);
             await this.notificationsService.showNotification(error.message);
           });
         } else {

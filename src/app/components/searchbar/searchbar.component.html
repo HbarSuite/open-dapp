@@ -1,0 +1,9 @@
+<div class="search">
+  <ion-searchbar #searchBar [hidden]="!isSearchBarOpen" 
+  (ionBlur)="isSearchBarOpen=false" showClearButton="focus"
+  [debounce]="1000" (ionChange)="handleChange($event)"
+  placeholder="Search" mode="md"></ion-searchbar>
+  <ion-button *ngIf="!isSearchBarOpen" (click)="searchClick()">
+    <ion-icon slot="icon-only" name="search-outline"></ion-icon>
+  </ion-button>
+</div>

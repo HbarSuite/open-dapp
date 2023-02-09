@@ -7,13 +7,15 @@ import { IonicModule } from '@ionic/angular';
 import { SmartNodesPageRoutingModule } from './smart-nodes-routing.module';
 
 import { SmartNodesPage } from './smart-nodes.page';
+import { ComponentsModule } from '../components/components.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    SmartNodesPageRoutingModule
+    SmartNodesPageRoutingModule,
+    ComponentsModule
   ],
   providers: [],
   declarations: [SmartNodesPage]

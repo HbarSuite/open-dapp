@@ -7,6 +7,12 @@ ion-content {
   --ion-text-color: #fff;
 }
 
+ion-menu ion-content {
+  --padding-start: 8px;
+  --padding-end: 8px;
+  --padding-bottom: 20px;
+}
+
 ion-footer ion-item {
   --ion-background-color: #200e4e;
   --ion-text-color: #FFFFFF;
@@ -15,13 +21,6 @@ ion-footer ion-item {
 ion-footer {
   background-color: #200e4e;
   color: #FFFFFF;
-}
-
-ion-menu ion-content {
-  --padding-start: 8px;
-  --padding-end: 8px;
-  --padding-top: 20px;
-  --padding-bottom: 20px;
 }
 
 .pulse-button {
@@ -101,12 +100,36 @@ ion-menu ion-item.selected {
   --background-opacity: 0.14;
 }
 
-ion-fab-button img {
-  padding: 10px;
+ion-item.selected {
+  --color: #9500ff;
 }
 
 ion-menu ion-item.selected ion-icon {
   color: #9500ff;
+}
+
+ion-menu ion-item.sub-selected {
+  --background: #5221C4;
+  --background-opacity: 0.14;
+}
+
+.sub-menu ion-menu-toggle ion-item{
+  --padding-start:20px;
+  font-size: small;
+}
+
+.sub-menu ion-menu-toggle ion-icon{
+  font-size: 16px;
+}
+
+ion-menu.md ion-item a{
+  --padding-start: 10px;
+  --padding-end: 10px;
+  border-radius: 4px;
+}
+
+ion-fab-button img {
+  padding: 10px;
 }
 
 ion-menu ion-item ion-icon {

@@ -39,7 +39,7 @@
                     <ion-item>
                       <ion-skeleton-text animated style="width: 85%"></ion-skeleton-text>
                     </ion-item>
-                  </ion-list>                  
+                  </ion-list>
                   <ion-card-subtitle>
                     <div class="subtitle-div">
                       <div class="subtitle-div2">
@@ -68,7 +68,7 @@
                 </ion-card-content>
 
               </div>
-            </ion-card>            
+            </ion-card>
 
             <ion-card class="cards_DAO" *ngIf="proposal != null">
               <div>
@@ -86,7 +86,7 @@
                       <ion-label class="txt-label">End Date</ion-label>
                       <p>{{formatDate(proposal.end_date)}}</p>
                     </ion-item>
-                  </ion-list>                  
+                  </ion-list>
                   <ion-card-subtitle>
                     <div class="subtitle-div">
                       <div class="subtitle-div2">
@@ -126,7 +126,7 @@
                     </ion-button>
                     <ion-button expand="block" class="vote-btn">
                       <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
-                    </ion-button>                                        
+                    </ion-button>
                   </div>
 
                   <div>
@@ -159,7 +159,7 @@
                         <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
                       </div>
                       <ion-progress-bar color="tertiary" [value]="0.40"></ion-progress-bar>
-                    </div>                                        
+                    </div>
                   </div>
 
                 </ion-card-content>
@@ -236,28 +236,6 @@
                           </ion-row>
                         </ion-grid>
                       </ion-label>
-                    </ion-item>          
-                    <ion-item>
-                      <ion-avatar slot="start" class="committee-avatar">
-                        <ion-skeleton-text animated></ion-skeleton-text>
-                      </ion-avatar>
-                      <ion-label class="space-between">
-                        <ion-grid>
-                          <ion-row>
-                            <ion-col size="4" class="text-wrap">
-                              <ion-skeleton-text animated style="width: 30%"></ion-skeleton-text>
-                            </ion-col>
-                            <ion-col size="4" class="text-wrap">
-                              <h3 style="text-align: center;">
-                                <ion-skeleton-text animated style="width: 30%"></ion-skeleton-text></h3>
-                            </ion-col>
-                            <ion-col size="4" class="text-wrap">
-                              <h3 style="text-align: end;">
-                                <ion-skeleton-text animated style="width: 30%"></ion-skeleton-text></h3>
-                            </ion-col>
-                          </ion-row>
-                        </ion-grid>
-                      </ion-label>
                     </ion-item>
                     <ion-item>
                       <ion-avatar slot="start" class="committee-avatar">
@@ -302,11 +280,33 @@
                           </ion-row>
                         </ion-grid>
                       </ion-label>
-                    </ion-item>                                                                                           
+                    </ion-item>
+                    <ion-item>
+                      <ion-avatar slot="start" class="committee-avatar">
+                        <ion-skeleton-text animated></ion-skeleton-text>
+                      </ion-avatar>
+                      <ion-label class="space-between">
+                        <ion-grid>
+                          <ion-row>
+                            <ion-col size="4" class="text-wrap">
+                              <ion-skeleton-text animated style="width: 30%"></ion-skeleton-text>
+                            </ion-col>
+                            <ion-col size="4" class="text-wrap">
+                              <h3 style="text-align: center;">
+                                <ion-skeleton-text animated style="width: 30%"></ion-skeleton-text></h3>
+                            </ion-col>
+                            <ion-col size="4" class="text-wrap">
+                              <h3 style="text-align: end;">
+                                <ion-skeleton-text animated style="width: 30%"></ion-skeleton-text></h3>
+                            </ion-col>
+                          </ion-row>
+                        </ion-grid>
+                      </ion-label>
+                    </ion-item>
                   </ion-list>
                 </ion-card-content>
               </ion-card>
-            </div>            
+            </div>
 
             <div *ngIf="proposal != null">
               <ion-card class="cards_proposal" *ngIf="proposal.status != 'closed' && proposal.status != 'approved'">
@@ -316,13 +316,16 @@
                 <ion-card-content >
 
                   <div class="justify-center" *ngFor="let option of proposal.options; index as i">
-                    <ion-button [disabled]="!snapshot || hasVoted() || isVoting" expand="block" [ngClass]="selectedOption.value == option ? 'vote-btn click': 'vote-btn'" 
+                    <ion-button [disabled]="!snapshot || hasVoted() || isVoting" expand="block" [ngClass]="selectedOption.value == option ? 'vote-btn click': 'vote-btn'"
                       (click)="selectOption(i)">{{option}}</ion-button>
                   </div>
 
                   <div>
-                    <ion-button [disabled]="!snapshot || snapshot.length == 0 || hasVoted() || isVoting || !selectedOption.value" expand="block" class="vote-btn-submit" (click)="voteProposal(proposal)">
-                      {{snapshot == null ? 'loading snapshot...' : (hasVoted() ? 'You voted already' : (isVoting ? 'Voting, please wait...' : 'Vote'))}}
+                    <ion-button *ngIf="getVoteLabel() != 'Try Again'" [disabled]="!snapshot || snapshot.length == 0 || hasVoted() || isVoting || !selectedOption.value" expand="block" class="vote-btn-submit" (click)="voteProposal(proposal)">
+                      {{getVoteLabel()}}
+                    </ion-button>
+                    <ion-button color="danger" *ngIf="getVoteLabel() == 'Try Again'" (click)="retryVoteProposal()" expand="block" class="vote-btn-submit">
+                      {{getVoteLabel()}}
                     </ion-button>
                   </div>
 
@@ -352,24 +355,26 @@
                 </ion-card-header>
                 <ion-card-content>
                   <ion-list slot="content" class="containerVotes">
-                    <ion-item *ngFor="let vote of votes">
-                      <ion-avatar slot="start" class="committee-avatar">
-                        <img [src]="generateImageUrl(dao.image)">
-                      </ion-avatar>
-                      <ion-label class="space-between">
-                        <ion-grid>
-                          <ion-row>
-                            <ion-col size="8" class="text-wrap">
-                              <h3>{{vote.wallet}}</h3>
-                              <h2>{{vote.option}}</h2>
-                            </ion-col>
-                            <ion-col size="4" class="text-wrap">
-                              <h3 style="text-align: end;">{{((vote.weight / proposal.latestStatistics.weights) * 100).toFixed(2)}} %</h3>
-                            </ion-col>
-                          </ion-row>
-                        </ion-grid>
-                      </ion-label>
-                    </ion-item>
+                    <div *ngFor="let vote of votes">
+                      <ion-item *ngIf="!vote.status">
+                        <ion-avatar slot="start" class="committee-avatar">
+                          <ion-img [src]="generateImageUrl(dao.image)"></ion-img>
+                        </ion-avatar>
+                        <ion-label class="space-between">
+                          <ion-grid>
+                            <ion-row>
+                              <ion-col size="8" class="text-wrap">
+                                <h3>{{vote.wallet}}</h3>
+                                <h2>{{vote.option}}</h2>
+                              </ion-col>
+                              <ion-col size="4" class="text-wrap">
+                                <h3 style="text-align: end;">{{vote.percentage}} %</h3>
+                              </ion-col>
+                            </ion-row>
+                          </ion-grid>
+                        </ion-label>
+                      </ion-item>
+                    </div>
                   </ion-list>
                 </ion-card-content>
               </ion-card>
@@ -393,7 +398,7 @@
     <ion-card color="light" class="cards_DAO ion-text-center">
       <ion-card-header>
         <div class="flex">
-          <ion-avatar class="avatar"><img [src]="generateImageUrl(dao.image)" alt="img"/></ion-avatar>
+          <ion-avatar class="avatar"><ion-img [src]="generateImageUrl(dao.image)" alt="img"></ion-img></ion-avatar>
         </div>
         <ion-card-title class="title">{{dao.name}}</ion-card-title>
         <ion-card-subtitle class="subtitle">{{dao.description}}</ion-card-subtitle>
@@ -402,7 +407,7 @@
       <ion-card-content>
         Sorry, you must be logged in and authenticated in order to see this proposal and be eligible to vote.
       </ion-card-content>
-    </ion-card>      
+    </ion-card>
   </div>
 </ion-content>
 

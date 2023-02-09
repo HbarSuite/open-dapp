@@ -1,0 +1,58 @@
+.list-scroll{
+  overflow-x: auto;
+  // overflow-x: hidden;
+}
+.table{
+  // min-width: 440px;
+}
+
+.list1{
+  // min-width: 400px;
+
+  margin:0px 20px ;
+  background-color:transparent;
+  border-radius: 10px;
+  padding: 0px;
+
+  .header-list{
+    --background:#2c106e;
+  }
+  .header-list ion-col{
+    padding: 20px 0px;
+  }
+
+  ion-item{
+    --background: linear-gradient(270deg, #4916c0 0%, #3d149b 90%);
+    --color:white;
+  }
+
+  ion-avatar{
+    margin-right:15px;
+  }
+
+  ion-label p{
+    color:rgb(218, 216, 216);
+  }
+
+  ion-grid ion-label{
+    text-align: start;
+  }
+
+  ion-grid{
+    text-align: center;
+  }
+
+  ion-chip{
+    --background: rgb(226, 255, 230);
+    --color: #00be29;
+  }
+
+
+}
+
+span.negative{
+  color: #d52239;
+}
+span.positive{
+  color:#31c46c;
+}

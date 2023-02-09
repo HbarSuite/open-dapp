@@ -4,20 +4,11 @@
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
     <ion-buttons slot="end">
-      <ion-button id="show-node-details-dao">
-        <ion-icon slot="icon-only" ios="pulse" md="pulse"></ion-icon>
-      </ion-button>
-    </ion-buttons>   
+      <hsuite-node-details></hsuite-node-details>
+    </ion-buttons>
     <ion-title>DAO</ion-title>
   </ion-toolbar>
 </ion-header>
-
-<ion-popover trigger="show-node-details-dao" triggerAction="click">
-  <ng-template>
-    <ion-content [innerHTML]="getNodeDetails()" class="ion-padding">
-    </ion-content>
-  </ng-template>
-</ion-popover>
 
 <ion-content class="ion-align-items-center ion-text-center" color="tertiary">
   <ion-grid>
@@ -40,17 +31,24 @@
   <ion-grid *ngIf="filteredDaos.length > 0">
     <ion-row>
       <ion-col size-md="4" size-sm="6" size-xs="12" *ngFor="let dao of filteredDaos">
-        <ion-card  color="light" class="cards_DAO ion-text-center">
+        <ion-card color="light" class="cards_DAO ion-text-center" *ngIf="!dao.owner || dao.owner == wallet">
           <ion-card-header>
             <div class="flex">
-              <ion-avatar class="avatar"><img [src]="generateImageUrl(dao.image)" alt="img"/></ion-avatar>
+              <ion-avatar class="avatar">
+                <ion-img [src]="generateImageUrl(dao.image)" alt="img"></ion-img>
+              </ion-avatar>
             </div>
             <ion-card-title class="title">{{dao.name}}</ion-card-title>
             <ion-card-subtitle class="subtitle">{{dao.description}}</ion-card-subtitle>
           </ion-card-header>
 
-          <ion-card-content>
+          <ion-card-content *ngIf="!dao.owner && !dao.status">
             <ion-button [routerLink]="['project', dao.tokenId]" expand="block">See More</ion-button>
+          </ion-card-content>
+
+          <ion-card-content *ngIf="dao.owner && dao.status">
+            <ion-button *ngIf="dao.status == 'pending'" disabled expand="block">Writing into HCS...</ion-button>
+            <ion-button color="danger" *ngIf="dao.status == 'error'" (click)="submitDao(dao)" expand="block">Try Again</ion-button>
           </ion-card-content>
         </ion-card>
       </ion-col>

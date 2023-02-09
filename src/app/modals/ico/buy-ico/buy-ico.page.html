@@ -3,7 +3,7 @@
     <ion-title>Buy ${{token.symbol}}</ion-title>
     <ion-buttons slot="end">
       <ion-button (click)="closeModal()">Close</ion-button>
-    </ion-buttons>    
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
@@ -16,9 +16,9 @@
     <ion-item color="secondary">
       <ion-label>You will receive {{formatNumber(tokenAmount)}}</ion-label>
     </ion-item>
-  
+
     <ion-avatar class="avatar">
-      <img [src]="token.image" />
+      <ion-img [src]="token.image"></ion-img>
     </ion-avatar>
 
     <div *ngIf="token.launchpad.calculatedFees">
@@ -38,9 +38,9 @@
 
     <ion-card>
       <!-- <ion-avatar class="avatar"> -->
-        <img [src]="token.launchpad.header" />
+        <ion-img [src]="token.launchpad.header"></ion-img>
       <!-- </ion-avatar> -->
-      
+
       <ion-card-header>
         <ion-card-subtitle>{{token.id}}</ion-card-subtitle>
         <ion-card-title>{{token.name}}</ion-card-title>
@@ -60,8 +60,8 @@
         <div *ngIf="!discount">
           <ion-text>{{token.launchpad.price}} {{getTokenSymbol()}}</ion-text>
         </div>
-      </ion-button>  
-    </ion-card> 
+      </ion-button>
+    </ion-card>
   </div>
-  
+
 </ion-content>

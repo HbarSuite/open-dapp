@@ -1,0 +1,36 @@
+.home-head{
+    text-align: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+
+    margin: 20px 20px 0px 20px;
+
+    border: 0px solid #ccc;
+    border-radius: 10px;
+    padding: 40px;
+    position: relative;
+    isolation: isolate;
+
+  }
+  .home-head:after{
+    content: "";
+    position: absolute;
+    inset: 0px;
+    z-index: -1;
+    background: #5221c4;
+    opacity: .6;
+  }
+
+  .home-head-no-bg{
+    text-align: center;
+    margin: 20px 20px 0px 20px;
+
+    border: 0px solid #ccc;
+    border-radius: 10px;
+    margin: 20px;
+    position: relative;
+    isolation: isolate;
+
+
+  }
