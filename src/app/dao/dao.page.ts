@@ -4,6 +4,7 @@ import { CreateDaoPage } from '../modals/dao/create-dao/create-dao.page';
 import { SmartNodeSdkService } from '@hsuite/angular-sdk';
 import { DaoService } from '../services/dao/dao.service';
 import { NotificationsService } from '../services/notifications/notifications.service';
+import { environment } from 'src/environments/environment';
 import { Subscription } from 'rxjs';
 import * as lodash from 'lodash';
 
@@ -75,7 +76,7 @@ export class DaoPage implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.daoService.getList().then(daos => {
-      this.daos = this.mapWrongDAOs(daos);
+      this.daos = this.mapWrongDAOs(daos.filter(dao => environment.daos.includes(dao.tokenId)));
       this.filteredDaos = this.daos;
     }).catch(error => {
       this.notificationsService.showNotification(error.message);

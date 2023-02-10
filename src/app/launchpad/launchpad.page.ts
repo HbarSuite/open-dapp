@@ -11,6 +11,7 @@ import { SmartNodeSdkService } from '@hsuite/angular-sdk';
 import { ActivatedRoute } from '@angular/router';
 import { Clipboard } from '@capacitor/clipboard';
 import { Transaction } from '@hashgraph/sdk';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-launchpad',
@@ -162,6 +163,8 @@ export class LaunchpadPage implements OnInit, OnDestroy {
   async loadLaunchpads() {
     try {
       this.tokens = await this.launchpadService.getList();
+      this.tokens = this.tokens.filter(token => environment.launchpads.includes(token.id));
+      
       this.filteredTokens = this.tokens.map(token => {
         token.launchpad.calculatedFees = this.calculateTokenFees(token).formatted;
         return token;
