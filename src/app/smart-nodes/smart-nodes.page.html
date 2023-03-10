@@ -54,7 +54,7 @@
                         </ion-chip>
                       </ion-card-subtitle>
                       <ion-card-title color="primary">
-                        <h1>{{node.value.node.url.replace('https://', '').replace('.hbarsuite.network', '')}}</h1>
+                        <h1>{{node.value.node.url.replace('wss://', '').replace('/gateway', '').replace('.hbarsuite.network', '')}}</h1>
                          <!-- <ion-text color="dark">
                           <h3><b>Operator</b>: {{node.value.node.operator}}</h3>
                           <p>{{node.value.node.url}}</p>
@@ -62,7 +62,7 @@
 
                         <ion-text color="dark">
                           <!-- <h3><b>Operator</b>: {{node.value.node.operator}}</h3> -->
-                          <p><a [href]="node.value.node.url + '/api'" target="_blank"><b>{{node.value.node.url}}</b></a></p>
+                          <p><a [href]="node.value.node.url.replace('wss://', 'https://').replace('/gateway', '') + '/api'" target="_blank"><b>{{node.value.node.url.replace('wss://', '').replace('/gateway', '')}}</b></a></p>
                           <!-- <p>{{node.value.node.url}}</p> -->
                         </ion-text>
                       </ion-card-title>

@@ -1,16 +1,16 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AlertController, ModalController } from '@ionic/angular';
 import { LoadingController } from '@ionic/angular';
-import { BuyIcoPage } from '../modals/ico/buy-ico/buy-ico.page';
+import { BuyPage } from './modals/buy/buy.page';
 import { NotificationsService } from '../services/notifications/notifications.service';
 import { Subscription } from 'rxjs';
 import Decimal from 'decimal.js';
 import * as lodash from 'lodash';
-import { LaunchpadService } from '../services/launchpad/launchpad.service';
 import { SmartNodeSdkService } from '@hsuite/angular-sdk';
 import { ActivatedRoute } from '@angular/router';
 import { Clipboard } from '@capacitor/clipboard';
 import { Transaction } from '@hashgraph/sdk';
+import { LaunchpadService } from './service/launchpad.service';
 import { environment } from 'src/environments/environment';
 
 @Component({
@@ -162,9 +162,9 @@ export class LaunchpadPage implements OnInit, OnDestroy {
 
   async loadLaunchpads() {
     try {
-      this.tokens = await this.launchpadService.getList();
+      this.tokens = await this.launchpadService.list();
       this.tokens = this.tokens.filter(token => environment.launchpads.includes(token.id));
-      
+
       this.filteredTokens = this.tokens.map(token => {
         token.launchpad.calculatedFees = this.calculateTokenFees(token).formatted;
         return token;
@@ -174,6 +174,15 @@ export class LaunchpadPage implements OnInit, OnDestroy {
     } catch(error) {
       await this.notificationsService.showNotification(error.message);
       this.place_holders = [];
+    }
+  }
+
+  generateImageUrl(image: string) {
+    if(image.startsWith('data:')) {
+      return image;
+    } else {
+      let node = this.smartNodeSdkService.getNetworkService().getCurrentNode().url;
+      return `${node}/${image}`;
     }
   }
 
@@ -264,7 +273,7 @@ export class LaunchpadPage implements OnInit, OnDestroy {
     try {
       const discount = await this.CalculateDiscount(token, sender);
       const modal = await this.modalController.create({
-        component: BuyIcoPage,
+        component: BuyPage,
         componentProps: {
           token: token,
           sender: sender,
@@ -343,31 +352,6 @@ export class LaunchpadPage implements OnInit, OnDestroy {
     }
   }
 
-    async checkBalances(wallet: string, tokenToBuy: any): Promise<boolean> {
-    return new Promise(async (resolve, reject) => {
-      try {
-        let utilities = (await this.smartNodeSdkService.getRestService().getUtilities()).data;
-        let accountInfo = (await this.smartNodeSdkService.getRestService().getAccountBalance(wallet)).data;
-        let hsuiteFees = this.calculateTokenFees(tokenToBuy); 
-
-        if(tokenToBuy.id == utilities.hsuite.id) {
-          resolve(true);
-        } else {
-          let hsuiteInWallet = accountInfo.tokens.find(token => token.tokenId == utilities.hsuite.id);
-          hsuiteInWallet = hsuiteInWallet.balance / (10 ** utilities.hsuite.decimals);
-
-          if(hsuiteInWallet >= hsuiteFees.value) {
-            resolve(true);
-          } else {
-            reject(new Error(`Sorry, you must own enough HSUITE in order to pay fees.`));
-          }
-        }      
-      } catch(error) {
-        reject(error);
-      }
-    });
-  }
-
   async BuyNow(token: any) {
     this.launchpadService.loadHashconnectData().then(async(localData) => {
       if(localData.accountIds && localData.accountIds.length) {
@@ -400,8 +384,6 @@ export class LaunchpadPage implements OnInit, OnDestroy {
             missingTokens = [...new Set(missingTokens)];
 
             if(missingTokens.length == 0) {
-              // check for hsuite balance before allowing to buy...
-              await this.checkBalances(localData.accountIds[0], token);
               await this.openBuyModal(token, localData.accountIds[0]);
             } else {
               loading.message = "Please approve token association from your wallet...";

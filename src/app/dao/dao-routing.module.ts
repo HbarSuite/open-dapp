@@ -14,7 +14,7 @@ const routes: Routes = [
   },
   {
     path: 'create-dao',
-    loadChildren: () => import('../modals/dao/create-dao/create-dao.module').then( m => m.CreateDaoPageModule)
+    loadChildren: () => import('./modals/create-dao/create-dao.module').then( m => m.CreateDaoPageModule)
   },
 ];
 

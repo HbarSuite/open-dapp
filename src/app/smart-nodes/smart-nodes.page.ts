@@ -18,6 +18,7 @@ export class SmartNodesPage implements OnInit {
 
   ngOnInit() {
     this.nodesOnline = this.smartNodeSdkService.getSocketsService().getNodesOnline();
+    console.log(this.nodesOnline)
   }
 
 }

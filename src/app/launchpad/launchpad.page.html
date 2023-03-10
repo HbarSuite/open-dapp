@@ -163,7 +163,7 @@
               </div>
 
               <ion-progress-bar [value]="token.launchpad.percentage / 100"></ion-progress-bar>
-              <ion-button expand="block" (click)="BuyNow(token)" style="padding-top: 10px;">BUY NOW</ion-button>
+              <ion-button *ngIf="token.launchpad.percentage < 100" expand="block" (click)="BuyNow(token)" style="padding-top: 10px;">BUY NOW</ion-button>
             </ion-card-content>
           </ion-card>
         </ion-col>

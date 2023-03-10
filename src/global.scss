@@ -9,17 +9,17 @@
  * https://ionicframework.com/docs/layout/global-stylesheets
  */
 
-.swiper-pagination-fraction,
-.swiper-pagination-custom,
-.swiper-container-horizontal > .swiper-pagination-bullets {
-  bottom: none !important;
-  height: 20px;
-}
+// .swiper-pagination-fraction,
+// .swiper-pagination-custom,
+// .swiper-container-horizontal > .swiper-pagination-bullets {
+//   bottom: none !important;
+//   height: 20px;
+// }
 
-.swiper-pagination {
-  top: 15% !important;
-  margin-top: 5px;
-}
+// .swiper-pagination {
+//   top: 15% !important;
+//   margin-top: 5px;
+// }
 
 .joyride-step__container {
   border-radius: 25px !important;
@@ -68,6 +68,58 @@
   }
 }
 
+.swiper-button-next {
+  right: -5px;
+}
+.swiper-button-prev{
+  left: -5px;
+}
+.swiper-button-prev:after,
+.swiper-button-next:after{
+  font-size: 20px;
+  color: white;
+}
+
+.swiper-pagination-fraction, .swiper-pagination-custom, .swiper-horizontal > .swiper-pagination-bullets, .swiper-pagination-bullets.swiper-pagination-horizontal {
+  bottom: -2px !important;
+}
+
+.chart-modal{
+  --backdrop-opacity: 1;
+  backdrop-filter: blur(3px);
+
+  &::part(content) {    
+    position: absolute; 
+    --width: 90%;
+    border-radius: 25px;
+    display: block;
+    border-radius: 0px;
+    box-shadow: 0px 0px 20px 5px rgb(0 0 0 / 32%);
+ }
+
+ &::part(backdrop) {
+  background: rgba(0, 0, 0, 0.8);
+}
+
+  &::part(handle) {
+    background: var(--ion-color-primary);
+    width: 150px;
+    height: 6px;
+  }
+
+}
+
+ion-popover.calendar-popover {
+  --width: 382px;
+  ion-datetime {
+    // --background: #E0E0E0;
+    --background-rgb: 224, 224, 224;
+    
+    border-radius: 16px;
+    box-shadow: rgba(var(--ion-color-rose-rgb), 0.3) 0px 10px 15px -3px;
+  }
+}
+
 /* Core CSS required for Ionic components to work properly */
 @import "~@ionic/angular/css/core.css";
 
@@ -95,3 +147,5 @@
 @import "~swiper/scss/scrollbar";
 @import "~swiper/scss/zoom";
 @import "~@ionic/angular/css/ionic-swiper";
+@import '~swiper/swiper-bundle.css';
+

@@ -2,11 +2,11 @@ import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { IonContent, IonSlides, LoadingController } from '@ionic/angular';
 import { SmartNodeSdkService } from '@hsuite/angular-sdk';
-import { DaoService } from 'src/app/services/dao/dao.service';
 import { NotificationsService } from 'src/app/services/notifications/notifications.service';
 import * as moment from 'moment';
 import * as lodash from 'lodash';
 import { Subscription } from 'rxjs';
+import { DaoService } from '../service/dao.service';
 
 @Component({
   selector: 'app-dao-details',
@@ -182,10 +182,11 @@ export class DaoDetailsPage implements OnInit, OnDestroy {
       this.wallet = lodash.first(hashConnectData.accountIds);
     });
     
-    this.daoService.getDao(daoTokenId).then(async(dao) => {
+    this.daoService.get(daoTokenId).then(async(dao) => {
       this.dao = this.mapWrongDAO(dao);
       await this.initProposals(false);
     }).catch(error => {
+      console.error(error);
       this.notificationsService.showNotification(error.message);
     });
 
