@@ -309,6 +309,18 @@
             </div>
 
             <div *ngIf="proposal != null">
+              <ion-card class="cards_proposal" *ngIf="proposal.type == 'private'">
+                <ion-card-header class="divisor">
+                  <ion-card-title class="align-center">Original Options</ion-card-title>
+                </ion-card-header>
+                <ion-card-content >
+
+                  <div class="justify-center" *ngFor="let option of proposal.original_options; index as i">
+                    <ion-button disabled expand="block" class="vote-btn">{{option}}</ion-button>
+                  </div>
+                </ion-card-content>
+              </ion-card>
+
               <ion-card class="cards_proposal" *ngIf="proposal.status != 'closed' && proposal.status != 'approved'">
                 <ion-card-header class="divisor">
                   <ion-card-title class="align-center">Cast your vote</ion-card-title>

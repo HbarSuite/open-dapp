@@ -1,12 +1,12 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { IonModal, ModalController } from '@ionic/angular';
-import { CreateDaoPage } from '../modals/dao/create-dao/create-dao.page';
+import { CreateDaoPage } from './modals/create-dao/create-dao.page';
 import { SmartNodeSdkService } from '@hsuite/angular-sdk';
-import { DaoService } from '../services/dao/dao.service';
 import { NotificationsService } from '../services/notifications/notifications.service';
-import { environment } from 'src/environments/environment';
 import { Subscription } from 'rxjs';
 import * as lodash from 'lodash';
+import { DaoService } from './service/dao.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-dao',
@@ -56,6 +56,10 @@ export class DaoPage implements OnInit, OnDestroy {
       } else if (dao.tokenId == "0.0.1471053") {
         dao.image = 'assets/icon/trueperception.jpg';
         return dao;
+        // Frogmi DAO
+      } else if (dao.tokenId == "0.0.1067095") {
+        dao.image = 'assets/icon/frogmi.png';
+        return dao;
       }
       else {
         return dao;
@@ -75,7 +79,7 @@ export class DaoPage implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.daoService.getList().then(daos => {
+    this.daoService.list().then(daos => {
       this.daos = this.mapWrongDAOs(daos.filter(dao => environment.daos.includes(dao.tokenId)));
       this.filteredDaos = this.daos;
     }).catch(error => {
@@ -100,7 +104,7 @@ export class DaoPage implements OnInit, OnDestroy {
             break;
           case 'dao.entity.create.success':
             this.daos = [];
-            this.daos = this.mapWrongDAOs(await this.daoService.getList());
+            this.daos = this.mapWrongDAOs(await this.daoService.list());
             this.filteredDaos = this.daos;
             break;
         }
@@ -128,7 +132,7 @@ export class DaoPage implements OnInit, OnDestroy {
 
     if (role === 'confirm') {
       this.daos = [];
-      this.daos = this.mapWrongDAOs(await this.daoService.getList());
+      this.daos = this.mapWrongDAOs(await this.daoService.list());
       this.filteredDaos = this.daos;
     }
   }

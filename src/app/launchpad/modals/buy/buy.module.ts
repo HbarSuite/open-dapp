@@ -1,20 +1,17 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-
 import { IonicModule } from '@ionic/angular';
-
-import { BuyIcoPageRoutingModule } from './buy-ico-routing.module';
-
-import { BuyIcoPage } from './buy-ico.page';
+import { BuyPageRoutingModule } from './buy-routing.module';
+import { BuyPage } from './buy.page';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    BuyIcoPageRoutingModule
+    BuyPageRoutingModule
   ],
-  declarations: [BuyIcoPage]
+  declarations: [BuyPage]
 })
-export class BuyIcoPageModule {}
+export class BuyPageModule {}

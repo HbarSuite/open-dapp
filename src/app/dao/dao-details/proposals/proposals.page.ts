@@ -3,12 +3,12 @@ import { ActivatedRoute } from '@angular/router';
 import { AlertController, LoadingController, NavController } from '@ionic/angular';
 import { SmartNodeSdkService } from '@hsuite/angular-sdk';
 import { FormatsHelper } from 'src/app/helpers/formats';
-import { DaoService } from 'src/app/services/dao/dao.service';
 import { NotificationsService } from 'src/app/services/notifications/notifications.service';
 import Decimal from 'decimal.js';
 import * as lodash from 'lodash';
 import * as moment from 'moment';
 import { Subscription } from 'rxjs';
+import { DaoService } from '../../service/dao.service';
 
 @Component({
   selector: 'app-proposals',
@@ -171,7 +171,7 @@ export class ProposalsPage implements OnInit, OnDestroy {
         this.daoProposal = this.route.snapshot.paramMap.get('proposal');
         this.proposalType = <'public' | 'private'> this.route.snapshot.paramMap.get('type');
 
-        this.dao = this.mapWrongDAO(await this.daoService.getDao(this.daoTokenId));
+        this.dao = this.mapWrongDAO(await this.daoService.get(this.daoTokenId));
 
         if(!this.wallet) {
           this.isLoggedIn = false;
@@ -318,14 +318,6 @@ export class ProposalsPage implements OnInit, OnDestroy {
         if(start.isAfter()) {
           await this.presentAlert('Wait...', 'this proposal is still in pending', `it will start in ${start.fromNow()}`);
         } else {
-          // let voter = null;
-
-          // if(this.proposal.type == 'private' || this.dao.type == 'NON_FUNGIBLE_UNIQUE') {
-          //   voter = this.snapshot.find(snapshot => snapshot.account_id == this.wallet);
-          // } else {
-          //   voter = this.snapshot.find(snapshot => snapshot.account == this.wallet);
-          // }
-
           if(this.snapshot) {
             const loading = await this.loadingController.create({
               message: 'Sending your vote...'

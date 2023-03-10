@@ -19,6 +19,7 @@
 
         </ion-list>
       </ion-content>
+
       <ion-footer>
         <ion-item>
           <img src="assets/icon/hsuite_logo.png" width="60%">
@@ -27,6 +28,7 @@
           <ion-note>Powered By HbarSuite</ion-note>
         </ion-item>
       </ion-footer>
+
     </ion-menu>
     <ion-router-outlet id="main-content"></ion-router-outlet>
   </ion-split-pane>
@@ -36,6 +38,7 @@
       <ion-img src="assets/icon/hashpack.png" [ngStyle]="{'padding': '5px','opacity': '0.1', 'position': 'absolute', 'top': '0', 'left': '0'}"></ion-img>
       <span  *ngIf="accountIds.length == 0" style="position: relative; z-index: 1; font-size: 14px; font-weight: bold;">Login</span>
       <span  *ngIf="accountIds.length > 0" style="position: relative; z-index: 1; font-size: 12px; font-weight: bold;">Logout</span>
+
     </ion-fab-button>
     <ion-fab-list side="top" *ngIf="accountIds.length == 0">
       <ion-fab-button color="primary" class="account" (click)="hashPackConnect()">

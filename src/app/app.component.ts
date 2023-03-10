@@ -1,15 +1,13 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
-import { Animation, AnimationController, LoadingController, ModalController } from '@ionic/angular';
+import { Animation, AnimationController, LoadingController, ModalController, AlertController } from '@ionic/angular';
 import { Platform } from '@ionic/angular';
 import { NotificationsService } from './services/notifications/notifications.service';
 import { SmartNodeSdkService } from '@hsuite/angular-sdk';
 import { environment } from 'src/environments/environment';
 import { PairingPage } from './modals/pairing/pairing.page';
 import { FormatsHelper } from './helpers/formats';
-import { LaunchpadService } from './services/launchpad/launchpad.service';
-import * as lodash from 'lodash';
-import Decimal from 'decimal.js';
-import { Transaction } from '@hashgraph/sdk';
+import { Storage } from '@capacitor/storage';
+import { LaunchpadService } from './launchpad/service/launchpad.service';
 
 @Component({
   selector: 'app-root',
@@ -23,14 +21,12 @@ export class AppComponent {
   private loading = null;
   public accountIds: Array<string> = new Array();
   public network: string = 'testnet';
-  public holders: any;
-  public staking: any;
   @ViewChild('hashpack', { read: ElementRef, static: true }) private hashpack: ElementRef;
 
   public appPages = [
-    { title: 'LaunchPad', url: 'launchpad', icon: 'rocket' },
-    { title: 'DAO', url: 'dao', icon: 'people' },
-    { title: 'Smart Nodes', url: 'smart-nodes', icon: 'pulse' },
+    { title: 'LaunchPad', url: 'launchpad', icon: 'rocket', badge: 'beta', color: 'warning' },
+    { title: 'DAO', url: 'dao', icon: 'people', badge: 'beta', color: 'warning' },
+    { title: 'Smart Nodes', url: 'smart-nodes', icon: 'pulse', badge: 'beta', color: 'warning' }
   ];
 
   constructor(
@@ -40,9 +36,13 @@ export class AppComponent {
     private smartNodeSdkService: SmartNodeSdkService,
     private modalController: ModalController,
     private loadingController: LoadingController,
-    private launchpadService: LaunchpadService
+    private launchpadService: LaunchpadService,
+    private alertController: AlertController
   ) {
     this.formatsHelper = new FormatsHelper();
+
+    this.showDisclaimer();
+    // this.resetDisclaimer();
 
     this.platform.ready().then(async(readySource) => {
       // subscribing to webSockets authentication events...
@@ -59,7 +59,8 @@ export class AppComponent {
             try {
               this.loading.dismiss();
             } catch(error) {
-              // console.error(error);
+              console.error(error);
+              // this.notificationsService.showNotification(error.message);
             }
 
             this.notificationsService.showNotification(
@@ -78,6 +79,7 @@ export class AppComponent {
               }, 1000);
             } catch(error) {
               console.error(error);
+              // this.notificationsService.showNotification(error.message);
             }
 
             let toast = null;
@@ -103,12 +105,14 @@ export class AppComponent {
           try {
             this.qrCodeModal.dismiss();
           } catch(error) {
-            console.error(error.message);
+            console.error(error);
+            // this.notificationsService.showNotification(error.message);
           }
 
           this.animation.stop();
           await this.notificationsService.showNotification('Your Hashpack Wallet has been connected!', 'success');
         } else {
+          window.location.reload();
           this.animation.play();
         }
 
@@ -137,6 +141,8 @@ export class AppComponent {
             <'previewnet' | 'testnet' | 'mainnet'> environment.hashpack,
             'restore'
           );
+
+          // await this.notificationsService.showNotification('Your Hashpack Wallet has been connected!', 'success');
         }
       }).catch(async(error) => {
         await this.notificationsService.showNotification(error.message);
@@ -147,69 +153,6 @@ export class AppComponent {
   public formatAmount(amount: number) {
     // return this.formatsHelper.formatNumber(amount, ',', '.', 'HSUITE', 4);
     return this.formatsHelper.formatBigNumber(amount, 2);
-  }
-
-  public calculateStakingPercentage() {
-    return {
-      raw: (this.staking.total.hsuite / this.holders.total.hsuite),
-      formatted: `${((this.staking.total.hsuite / this.holders.total.hsuite) * 100).toFixed(2)} %`
-    }
-  }
-
-  public async StakeNow() {
-    let launchpads = await this.launchpadService.getList();
-    let token = launchpads.find(launchpad => launchpad.id == '0.0.1461158');
-    let wallet = lodash.first(this.accountIds);
-
-    if(wallet) {
-      let walletNFTs = (await this.smartNodeSdkService.getRestService().getNftForHolder(wallet)).data;
-      let isStaking = walletNFTs.find(nft => nft.token_id == token.id);
-
-      if(!isStaking) {
-        const loading = await this.loadingController.create({
-          message: 'Hsuite Network is validating your request, please wait...'
-        });
-    
-        loading.present();   
-    
-        let launchpadBuyResponse = await this.launchpadService.launchpadNftBuy(
-          wallet,
-          new Decimal(token.launchpad.price),
-          token.id
-        );
-
-        loading.message = 'Please sign the transaction in your wallet...';
-
-        let hashpackResponse: any = await this.launchpadService.hashpackTransaction(
-          launchpadBuyResponse.transaction, wallet
-        );
-
-        let transactionToExecute = <any>Transaction.fromBytes(new Uint8Array(launchpadBuyResponse.transaction));
-        let transactionId = lodash.first(transactionToExecute._transactionIds.list).toString();
-
-        if(hashpackResponse.success) {
-          loading.dismiss();
-          await this.notificationsService.showNotification(launchpadBuyResponse.message, 'success');
-        } else {
-          loading.dismiss();
-          await this.notificationsService.showNotification(`Transaction failed: ${hashpackResponse.error}`);
-        }
-
-        try {
-          await this.launchpadService.launchpadConfirm(
-            transactionId, 
-            hashpackResponse.success, 
-            hashpackResponse.error
-          );
-        } catch(error) {
-          console.error(error);
-        }        
-      } else {
-        this.notificationsService.showNotification('This account is already staked.', 'warning');
-      }
-    } else {
-      await this.notificationsService.showNotification(`Please login first.`);
-    }
   }
 
   public async hashPackConnect() {
@@ -257,4 +200,30 @@ export class AppComponent {
       await this.notificationsService.showNotification(error.message);
     }
   }
+
+  async showDisclaimer() {
+    let timeVisited = await Storage.get({ key: 'firstTime' });
+
+    if (timeVisited.value == null) {
+      const alert = await this.alertController.create({
+        header: 'Disclaimer',
+        message: 'HbarSuite is currently in beta state and is provided on an "as is" and "as available" basis. Despite this, it may contain errors or inaccuracies, hence the use of the app is at your own risk. <br/><br/>Although HbarSuite will do anything in its power to solve any potential issue, the team is not liable for any damages, loss of profits, or any other damages arising from or in connection with the use of the dApp. <br/><br/>The information provided on the dApp should not be considered as investment advice. By using the dApp, you acknowledge and accept the risks associated with beta software and DeFi Platforms.',
+        cssClass: 'disclaimer-alert',
+        mode: 'ios',
+        backdropDismiss: false,
+        buttons: [{
+            text: 'I understand',
+            handler: () => { Storage.set({ key: 'firstTime', value: 'false' }); }
+          }]
+      });
+      await alert.present();
+    }
+  }
+
+  resetDisclaimer() {
+    Storage.remove({ key: 'firstTime' });
+    this.showDisclaimer();
+  }
 }
+
+

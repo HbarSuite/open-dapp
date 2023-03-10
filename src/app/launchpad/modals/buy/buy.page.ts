@@ -3,11 +3,11 @@ import { ModalController } from '@ionic/angular';
 import { FormatsHelper } from '../../../helpers/formats';
 
 @Component({
-  selector: 'app-buy-ico',
-  templateUrl: './buy-ico.page.html',
-  styleUrls: ['./buy-ico.page.scss'],
+  selector: 'app-buy',
+  templateUrl: './buy.page.html',
+  styleUrls: ['./buy.page.scss'],
 })
-export class BuyIcoPage implements OnInit {
+export class BuyPage implements OnInit {
   @Input() tokenSymbol: any;
   @Input() token: any;
   @Input() sender: string;

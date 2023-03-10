@@ -1,16 +1,28 @@
 import { Injectable } from '@angular/core';
-import { SmartNodeSdkService } from '@hsuite/angular-sdk';
+import { SmartNodeSdkService, SmartNodeSocket } from '@hsuite/angular-sdk';
 import { NotificationsService } from '../notifications/notifications.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SmartService {
+  protected nodeSocket: SmartNodeSocket = null;
 
   constructor(
     protected smartNodeSdkService: SmartNodeSdkService,
     protected notificationsService: NotificationsService
   ) {}
+
+  async getUtilities(): Promise<any> {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const utilities = await this.smartNodeSdkService.getRestService().getUtilities();
+        resolve(utilities.data);
+      } catch(error) {
+        reject(error);
+      }
+    });
+  }
 
   async loadHashconnectData(): Promise<any> {
     return new Promise(async (resolve, reject) => {

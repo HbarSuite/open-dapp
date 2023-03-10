@@ -8,6 +8,10 @@ const routes: Routes = [
     pathMatch: 'full'
   },
   {
+    path: 'pairing',
+    loadChildren: () => import('./modals/pairing/pairing.module').then( m => m.PairingPageModule)
+  },
+  {
     path: 'launchpad',
     loadChildren: () => import('./launchpad/launchpad.module').then( m => m.LaunchpadPageModule)
   },

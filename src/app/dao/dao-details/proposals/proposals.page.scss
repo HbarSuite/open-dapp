@@ -81,9 +81,11 @@
 
 .top-space{
   margin-top: 20px;
+  justify-content: center;
 }
 .top-space10{
   margin-top: 10px;
+  justify-content: center;
 }
 
 .bot-space{
@@ -167,9 +169,8 @@ ion-progress-bar {
   margin: auto;
   margin-top: 10px;
   width: 60%;
-
+  white-space: normal;
   font-size: 12px;
-
   display: flex;
   justify-content: center;
 
@@ -179,9 +180,7 @@ ion-progress-bar {
   --border-width: 1px;
   --box-shadow: 0px 0px 5px #9a0dff;
    color:#5221c4;
-
   --background: #f4f5f8;
-
 }
 
 .vote-btn:hover{

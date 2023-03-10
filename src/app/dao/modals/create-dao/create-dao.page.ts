@@ -1,11 +1,11 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { AlertController, IonSlides, LoadingController, ModalController } from '@ionic/angular';
-import { DaoService } from 'src/app/services/dao/dao.service';
 import { NotificationsService } from 'src/app/services/notifications/notifications.service';
 import * as lodash from 'lodash';
 import { SmartNodeSdkService } from '@hsuite/angular-sdk';
 import { Subscription } from 'rxjs';
 import { Clipboard } from '@capacitor/clipboard';
+import { DaoService } from 'src/app/dao/service/dao.service';
 
 @Component({
   selector: 'app-create-dao',
@@ -68,7 +68,7 @@ export class CreateDaoPage implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.daoService.getList().then(daos => {
+    this.daoService.list().then(daos => {
       this.daos = daos;
     }).catch(error => {
       this.notificationsService.showNotification(error.message);

@@ -9,8 +9,8 @@ const routes: Routes = [
     component: LaunchpadPage
   },
   {
-    path: 'buy-ico',
-    loadChildren: () => import('../modals/ico/buy-ico/buy-ico.module').then( m => m.BuyIcoPageModule)
+    path: 'buy',
+    loadChildren: () => import('./modals/buy/buy.module').then( m => m.BuyPageModule)
   },
 ];
 
